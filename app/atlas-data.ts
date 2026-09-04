@@ -586,7 +586,7 @@ export const thermalSites: ThermalSite[] = [
   },
 ];
 
-export type DoubtfulSite = {
+export type DubiousSite = {
   id: string;
   name: string;
   currentName: string;
@@ -600,7 +600,7 @@ export type DoubtfulSite = {
 
 // These records are intentionally not treated as confirmed thermal sites.
 // Their map coordinates show the modern locality context only, never a claimed Roman footprint.
-export const doubtfulSites: DoubtfulSite[] = [
+export const dubiousSites: DubiousSite[] = [
   {
     id: 'banya-panagyurishte',
     name: 'Banya, Panagyurishte Municipality',
@@ -719,7 +719,7 @@ export const doubtfulSites: DoubtfulSite[] = [
     lat: 42.65,
     lng: 25.925,
     zone: 'Central',
-    reason: 'The strongest doubtful case: reports of pools and finds are compelling but lack secure spring provenance.',
+    reason: 'The strongest dubious case: reports of pools and finds are compelling but lack secure spring provenance.',
     sourcePages: 'Dissertation p. 263 · printed p. 259',
   },
 ];

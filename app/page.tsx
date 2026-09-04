@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import {
   ArrowRight,
   BookOpenText,
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { doubtfulSites, thermalSites, type SourceFigure, type ThermalSite } from './atlas-data';
+import { dubiousSites, thermalSites, type SourceFigure, type ThermalSite } from './atlas-data';
 import mapGeodata from './map-geodata.json';
 
 const mapBounds = { west: 21.8, east: 28.9, north: 44.45, south: 40.65 };
@@ -28,6 +28,7 @@ const mapViewBox = { width: 1000, height: 650 };
 const mapZoomBounds = { min: 1, max: 2.25, step: 0.15 };
 
 type MapPoint = [number, number];
+type MapPan = { x: number; y: number };
 type MapGeometry =
   | { type: 'Polygon'; coordinates: MapPoint[][] }
   | { type: 'MultiPolygon'; coordinates: MapPoint[][][] };
@@ -179,26 +180,97 @@ function visualScope(site: ThermalSite, visual: DisplayVisual) {
 export default function Home() {
   const [selectedId, setSelectedId] = useState('diocletianopolis');
   const [showCaveats, setShowCaveats] = useState(false);
-  const [showDoubtful, setShowDoubtful] = useState(true);
+  const [showDubious, setShowDubious] = useState(true);
   const [showCurrentBorders, setShowCurrentBorders] = useState(true);
   const [showRomanEmpire, setShowRomanEmpire] = useState(true);
-  const [doubtfulFocusId, setDoubtfulFocusId] = useState<string | null>(null);
+  const [dubiousFocusId, setDubiousFocusId] = useState<string | null>(null);
   const [activeVisual, setActiveVisual] = useState<DisplayVisual | null>(null);
   const [mapZoom, setMapZoom] = useState(mapZoomBounds.min);
+  const [mapPan, setMapPan] = useState<MapPan>({ x: 0, y: 0 });
+  const [isMapDragging, setIsMapDragging] = useState(false);
+  const mapViewportRef = useRef<HTMLDivElement>(null);
+  const mapDragOrigin = useRef<(MapPan & { pointerId: number; clientX: number; clientY: number }) | null>(null);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
   const selectedVisual = primaryVisual(selected);
   const selectedSupportingVisuals = supportingVisuals(selected, selectedVisual?.image);
-  const doubtfulFocus = doubtfulSites.find((site) => site.id === doubtfulFocusId) ?? null;
+  const dubiousFocus = dubiousSites.find((site) => site.id === dubiousFocusId) ?? null;
   const selectSite = (site: ThermalSite) => {
     setSelectedId(site.id);
-    setDoubtfulFocusId(null);
+    setDubiousFocusId(null);
+  };
+  const constrainMapPan = (position: MapPan, zoom = mapZoom) => {
+    const viewport = mapViewportRef.current?.getBoundingClientRect();
+    if (!viewport || zoom <= mapZoomBounds.min) return { x: 0, y: 0 };
+
+    const maxX = (viewport.width * (zoom - 1)) / 2;
+    const maxY = (viewport.height * (zoom - 1)) / 2;
+    return {
+      x: Math.max(-maxX, Math.min(maxX, position.x)),
+      y: Math.max(-maxY, Math.min(maxY, position.y)),
+    };
+  };
+  const setMapViewZoom = (nextZoom: number) => {
+    const boundedZoom = Math.min(
+      mapZoomBounds.max,
+      Math.max(mapZoomBounds.min, Math.round(nextZoom * 100) / 100),
+    );
+    setMapZoom(boundedZoom);
+    setMapPan((current) => constrainMapPan(current, boundedZoom));
   };
   const updateMapZoom = (amount: number) => {
-    setMapZoom((current) => Math.min(
-      mapZoomBounds.max,
-      Math.max(mapZoomBounds.min, Math.round((current + amount) * 100) / 100),
-    ));
+    setMapViewZoom(mapZoom + amount);
+  };
+  const resetMapView = () => {
+    setMapZoom(mapZoomBounds.min);
+    setMapPan({ x: 0, y: 0 });
+    setIsMapDragging(false);
+    mapDragOrigin.current = null;
+  };
+  const panMapBy = (x: number, y: number) => {
+    setMapPan((current) => constrainMapPan({ x: current.x + x, y: current.y + y }));
+  };
+  const startMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (mapZoom <= mapZoomBounds.min || event.button !== 0) return;
+    if ((event.target as Element).closest('button, a')) return;
+
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    mapDragOrigin.current = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, ...mapPan };
+    setIsMapDragging(true);
+  };
+  const moveMap = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const origin = mapDragOrigin.current;
+    if (!origin || origin.pointerId !== event.pointerId) return;
+
+    setMapPan(constrainMapPan({
+      x: origin.x + event.clientX - origin.clientX,
+      y: origin.y + event.clientY - origin.clientY,
+    }));
+  };
+  const endMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const origin = mapDragOrigin.current;
+    if (!origin || origin.pointerId !== event.pointerId) return;
+
+    mapDragOrigin.current = null;
+    setIsMapDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+  const handleMapKeyboardPan = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (mapZoom <= mapZoomBounds.min) return;
+
+    const distance = event.shiftKey ? 90 : 42;
+    const directions: Record<string, MapPan> = {
+      ArrowLeft: { x: -distance, y: 0 },
+      ArrowRight: { x: distance, y: 0 },
+      ArrowUp: { x: 0, y: -distance },
+      ArrowDown: { x: 0, y: distance },
+    };
+    const movement = directions[event.key];
+    if (!movement) return;
+
+    event.preventDefault();
+    panMapBy(movement.x, movement.y);
   };
 
   useEffect(() => {
@@ -244,9 +316,9 @@ export default function Home() {
             <h2 id="map-title">Thermal sites in Bulgaria</h2>
           </div>
           <div className="toolbar-controls">
-            <label className="doubtful-toggle">
-              <Checkbox checked={showDoubtful} onCheckedChange={(checked) => { setShowDoubtful(checked === true); if (checked !== true) setDoubtfulFocusId(null); }} />
-              <span>Doubtful layer <b>{doubtfulSites.length}</b></span>
+            <label className="dubious-toggle">
+              <Checkbox checked={showDubious} onCheckedChange={(checked) => { setShowDubious(checked === true); if (checked !== true) setDubiousFocusId(null); }} />
+              <span>Dubious layer <b>{dubiousSites.length}</b></span>
             </label>
             <div className="layer-controls" role="group" aria-label="Map layers">
               <span className="layer-control-label">Map layers</span>
@@ -263,18 +335,30 @@ export default function Home() {
         </div>
 
         <div className="map-and-records">
-          <div className="coordinate-map" aria-label="Map of the catalogued thermal sites" onWheel={(event) => {
+          <div
+            ref={mapViewportRef}
+            className={`coordinate-map ${mapZoom > mapZoomBounds.min ? 'is-pannable' : ''} ${isMapDragging ? 'is-dragging' : ''}`}
+            role="region"
+            tabIndex={0}
+            aria-label="Interactive map of catalogued thermal sites. Use the map controls or scroll to zoom; drag or use the arrow keys to pan after zooming in."
+            onWheel={(event) => {
             const nextZoom = Math.min(
               mapZoomBounds.max,
               Math.max(mapZoomBounds.min, Math.round((mapZoom + (event.deltaY < 0 ? mapZoomBounds.step : -mapZoomBounds.step)) * 100) / 100),
             );
             if (nextZoom !== mapZoom) {
               event.preventDefault();
-              setMapZoom(nextZoom);
+              setMapViewZoom(nextZoom);
             }
-          }}>
-            <div className="map-topline"><span><Crosshair size={13} /> geographic reference map</span><span>{thermalSites.length} confirmed{showDoubtful ? ` · ${doubtfulSites.length} doubtful` : ''}</span></div>
-            <div className="map-zoom-layer" style={{ transform: `scale(${mapZoom})` }}>
+            }}
+            onPointerDown={startMapDrag}
+            onPointerMove={moveMap}
+            onPointerUp={endMapDrag}
+            onPointerCancel={endMapDrag}
+            onKeyDown={handleMapKeyboardPan}
+          >
+            <div className="map-topline"><span><Crosshair size={13} /> geographic reference map</span><span>{thermalSites.length} confirmed{showDubious ? ` · ${dubiousSites.length} dubious` : ''}</span></div>
+            <div className="map-zoom-layer" style={{ transform: `translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapZoom})` }}>
               <svg className="map-geography" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
                 <g className="map-graticule">
                   {[20, 22, 24, 26, 28, 30].map((lng) => {
@@ -311,7 +395,7 @@ export default function Home() {
                 const isSelected = selected.id === site.id;
                 return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
               })}
-              {showDoubtful && doubtfulSites.map((site) => <button type="button" className={`map-marker map-marker-doubtful ${doubtfulFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDoubtfulFocusId(site.id)} aria-pressed={doubtfulFocus?.id === site.id} aria-label={`Inspect doubtful site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DOUBTFUL</b> {site.name}</span></button>)}
+              {showDubious && dubiousSites.map((site) => <button type="button" className={`map-marker map-marker-dubious ${dubiousFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDubiousFocusId(site.id)} aria-pressed={dubiousFocus?.id === site.id} aria-label={`Inspect dubious site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DUBIOUS</b> {site.name}</span></button>)}
               <div className="map-footnote">
                 <span>Points are named settlement / spring anchors. Country borders locate the modern landscape; Roman provinces are a dated historical reference.</span>
                 <span><a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" target="_blank" rel="noreferrer">Natural Earth 1:50m ↗</a> · <a href="https://services3.arcgis.com/nwUScSWGt2wNe9dC/ArcGIS/rest/services/BA_Map100_Roman_Empire_117AD_Roman_Provinces/FeatureServer/0" target="_blank" rel="noreferrer">GISGILDE / Barrington Atlas, AD 117 ↗</a></span>
@@ -320,10 +404,10 @@ export default function Home() {
             <div className="map-zoom-controls" role="group" aria-label="Map zoom controls">
               <button type="button" onClick={() => updateMapZoom(mapZoomBounds.step)} disabled={mapZoom >= mapZoomBounds.max} aria-label="Zoom map in" title="Zoom in"><ZoomIn size={15} /></button>
               <button type="button" onClick={() => updateMapZoom(-mapZoomBounds.step)} disabled={mapZoom <= mapZoomBounds.min} aria-label="Zoom map out" title="Zoom out"><ZoomOut size={15} /></button>
-              <button type="button" onClick={() => setMapZoom(mapZoomBounds.min)} disabled={mapZoom === mapZoomBounds.min} aria-label="Reset map zoom" title="Reset zoom"><RotateCcw size={14} /></button>
-              <span aria-live="polite">{Math.round(mapZoom * 100)}%</span>
+              <button type="button" onClick={resetMapView} disabled={mapZoom === mapZoomBounds.min && mapPan.x === 0 && mapPan.y === 0} aria-label="Reset map zoom and position" title="Reset zoom and position"><RotateCcw size={14} /></button>
+              <span aria-live="polite" title={mapZoom > mapZoomBounds.min ? 'Drag the map to pan' : undefined}><b>{Math.round(mapZoom * 100)}%</b>{mapZoom > mapZoomBounds.min && <small>drag</small>}</span>
             </div>
-            {doubtfulFocus && <div className="doubtful-map-card"><button type="button" onClick={() => setDoubtfulFocusId(null)} aria-label="Close doubtful site note">×</button><span><CircleAlert size={13} /> DOUBTFUL / NOT CONFIRMED</span><b>{doubtfulFocus.name}</b><p>{doubtfulFocus.reason}</p><small>{doubtfulFocus.sourcePages} · mapped only to modern locality context</small></div>}
+            {dubiousFocus && <div className="dubious-map-card"><button type="button" onClick={() => setDubiousFocusId(null)} aria-label="Close dubious site note">×</button><span><CircleAlert size={13} /> DUBIOUS / NOT CONFIRMED</span><b>{dubiousFocus.name}</b><p>{dubiousFocus.reason}</p><small>{dubiousFocus.sourcePages} · mapped only to modern locality context</small></div>}
           </div>
 
           <aside className="record-stack" aria-label="Visible site records">
@@ -333,7 +417,7 @@ export default function Home() {
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
-              {showDoubtful && <span><i className="key-doubtful" />doubtful locality</span>}
+              {showDubious && <span><i className="key-dubious" />dubious locality</span>}
               <span className="record-key-evidence"><span className="evidence-dots" aria-hidden="true"><i className="is-on" /><i className="is-on" /><i /></span>dots = reported evidence categories</span>
             </div>
           </aside>
@@ -386,15 +470,15 @@ export default function Home() {
         <div className="catalog-grid">
           {thermalSites.map((site) => <button type="button" key={site.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); document.getElementById('site-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
         </div>
-        <div className="doubtful-section">
-          <div className="doubtful-heading"><div><p className="section-kicker"><CircleAlert size={13} /> Separate evidence status</p><h3>Doubtful sites, visibly held apart.</h3></div><p>These eleven localities are named in the dissertation’s <i>Dubious Sites</i> section. They are shown as amber, dashed locality markers—not confirmed spas—and do not receive reconstructed site views.</p></div>
-          <div className="doubtful-grid">{doubtfulSites.map((site) => <button type="button" className="doubtful-tile" key={site.id} onClick={() => { setShowDoubtful(true); setDoubtfulFocusId(site.id); document.querySelector('.coordinate-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><span>DOUBTFUL</span><h3>{site.name}</h3><p>{site.reason}</p><small>{site.sourcePages}</small></button>)}</div>
+        <div className="dubious-section">
+          <div className="dubious-heading"><div><p className="section-kicker"><CircleAlert size={13} /> Separate evidence status</p><h3>Dubious sites</h3></div><p>These eleven localities comprise the dissertation’s <i>Dubious sites</i> section. They are shown as amber, dashed locality markers—not confirmed spas—and do not receive reconstructed site views.</p></div>
+          <div className="dubious-grid">{dubiousSites.map((site) => <button type="button" className="dubious-tile" key={site.id} onClick={() => { setShowDubious(true); setDubiousFocusId(site.id); document.querySelector('.coordinate-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><span>DUBIOUS</span><h3>{site.name}</h3><p>{site.reason}</p><small>{site.sourcePages}</small></button>)}</div>
         </div>
       </section>
 
       <section className="method-section" aria-labelledby="method-title">
         <div className="method-stamp"><span>AV</span><small>2024</small></div>
-          <div><p className="section-kicker">Method & scope</p><h2 id="method-title">Evidence before atmosphere.</h2><p className="method-copy">This atlas follows the confirmed <i>Catalogue of Sites</i> in Avramova’s dissertation (digital pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have a plan or excavation plan reproduced in the dissertation; each is shown as a labelled source document. The atlas does not invent height, bath geometry or unrecorded dimensions.</p><button type="button" className="caveat-toggle" aria-expanded={showCaveats} onClick={() => setShowCaveats(!showCaveats)}><CircleAlert size={16} /> {showCaveats ? 'Hide' : 'Read'} scope & uncertainty notes</button>{showCaveats && <div className="caveat-box"><p><b>Included:</b> 16 confirmed top-level catalogue entries. Diocletianopolis is represented as one site with five separately catalogued spring sources.</p><p><b>Visible but separate:</b> 11 doubtful localities are amber and dashed on the map, receive written cautions, and never count as confirmed spas or receive reconstructed site views.</p><p><b>Plans:</b> Pautalia, Germania, Serdica, Diocletianopolis, Starozagorski Bani, Haskovski Mineralni Bani and Aquae Calidae have cited plan material in the dissertation. A plan is shown as source evidence, never expanded into an unsupported reconstruction.</p><p><b>Map layers:</b> current national borders come from Natural Earth; the Roman provincial reference is GISGILDE’s AD 117 vectorization based on Barrington Atlas Map 100, and is not treated as a time-specific boundary for every AD 46–395 record.</p><p><b>Editorial flags:</b> duplicate printed catalogue numbers, later well analyses, incomplete excavation publication and numerical contradictions stay visible in the relevant dossiers.</p></div>}</div>
+          <div><p className="section-kicker">Method & scope</p><h2 id="method-title">Evidence before atmosphere.</h2><p className="method-copy">This atlas follows the confirmed <i>Catalogue of Sites</i> in Avramova’s dissertation (digital pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have a plan or excavation plan reproduced in the dissertation; each is shown as a labelled source document. The atlas does not invent height, bath geometry or unrecorded dimensions.</p><button type="button" className="caveat-toggle" aria-expanded={showCaveats} onClick={() => setShowCaveats(!showCaveats)}><CircleAlert size={16} /> {showCaveats ? 'Hide' : 'Read'} scope & uncertainty notes</button>{showCaveats && <div className="caveat-box"><p><b>Included:</b> 16 confirmed top-level catalogue entries. Diocletianopolis is represented as one site with five separately catalogued spring sources.</p><p><b>Visible but separate:</b> 11 dubious localities are amber and dashed on the map, receive written cautions, and never count as confirmed spas or receive reconstructed site views.</p><p><b>Plans:</b> Pautalia, Germania, Serdica, Diocletianopolis, Starozagorski Bani, Haskovski Mineralni Bani and Aquae Calidae have cited plan material in the dissertation. A plan is shown as source evidence, never expanded into an unsupported reconstruction.</p><p><b>Map layers:</b> current national borders come from Natural Earth; the Roman provincial reference is GISGILDE’s AD 117 vectorization based on Barrington Atlas Map 100, and is not treated as a time-specific boundary for every AD 46–395 record.</p><p><b>Editorial flags:</b> duplicate printed catalogue numbers, later well analyses, incomplete excavation publication and numerical contradictions stay visible in the relevant dossiers.</p></div>}</div>
       </section>
 
       <footer className="atlas-footer"><span>THERMAE THRACIAE</span><span>Source-led exploration of Roman thermalism in Thrace</span><span>16 confirmed sites</span></footer>
