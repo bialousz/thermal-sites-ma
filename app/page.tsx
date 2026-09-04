@@ -205,17 +205,19 @@ export default function Home() {
     setSelectedId(site.id);
     setDubiousFocusId(null);
   };
-  const selectMapSite = (site: ThermalSite) => {
-    selectSite(site);
-
+  const scrollCatalogueToSite = (siteId: string) => {
     const list = recordListRef.current;
-    const row = list?.querySelector<HTMLElement>(`[data-site-id="${site.id}"]`);
+    const row = list?.querySelector<HTMLElement>(`[data-site-id="${siteId}"]`);
     if (!list || !row) return;
 
     const listBounds = list.getBoundingClientRect();
     const rowBounds = row.getBoundingClientRect();
     const centeredTop = list.scrollTop + rowBounds.top - listBounds.top - (listBounds.height - rowBounds.height) / 2;
     list.scrollTo({ top: Math.max(0, centeredTop), behavior: 'smooth' });
+  };
+  const selectMapSite = (site: ThermalSite) => {
+    selectSite(site);
+    scrollCatalogueToSite(site.id);
   };
   const constrainMapPan = (position: MapPan, zoom = mapZoom) => {
     const viewport = mapViewportRef.current?.getBoundingClientRect();
@@ -239,6 +241,12 @@ export default function Home() {
       y: -(y / mapViewBox.height - 0.5) * layer.offsetHeight * mapZoom,
     };
     setMapPan(constrainMapPan(target));
+  };
+  const selectCorpusSite = (site: ThermalSite) => {
+    selectSite(site);
+    centerMapOnSite(site);
+    scrollCatalogueToSite(site.id);
+    document.getElementById('site-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   const mapCanPan = (zoom = mapZoom) => {
     const viewport = mapViewportRef.current;
@@ -564,7 +572,7 @@ export default function Home() {
       <section className="catalog-section" aria-labelledby="catalog-title">
         <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title">The confirmed corpus</h2></div><p>Each tile moves the map and source view to that site. Water metadata is copied as catalogued; cautions stay attached to the records.</p></div>
         <div className="catalog-grid">
-          {thermalSites.map((site) => <button type="button" key={site.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); document.getElementById('site-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
+          {thermalSites.map((site) => <button type="button" key={site.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
         </div>
         <div className="dubious-section">
           <div className="dubious-heading"><div><h3>Dubious sites</h3></div><p>These eleven localities comprise the dissertation’s <i>Dubious sites</i> section. They are shown as amber, dashed locality markers—not confirmed spas—and do not receive reconstructed site views.</p></div>
