@@ -11,9 +11,12 @@ import {
   Landmark,
   MapPinned,
   Maximize2,
+  RotateCcw,
   Sparkles,
   Waves,
   X,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,6 +25,7 @@ import mapGeodata from './map-geodata.json';
 
 const mapBounds = { west: 21.8, east: 28.9, north: 44.45, south: 40.65 };
 const mapViewBox = { width: 1000, height: 650 };
+const mapZoomBounds = { min: 1, max: 2.25, step: 0.15 };
 
 type MapPoint = [number, number];
 type MapGeometry =
@@ -180,6 +184,7 @@ export default function Home() {
   const [showRomanEmpire, setShowRomanEmpire] = useState(true);
   const [doubtfulFocusId, setDoubtfulFocusId] = useState<string | null>(null);
   const [activeVisual, setActiveVisual] = useState<DisplayVisual | null>(null);
+  const [mapZoom, setMapZoom] = useState(mapZoomBounds.min);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
   const selectedVisual = primaryVisual(selected);
@@ -188,6 +193,12 @@ export default function Home() {
   const selectSite = (site: ThermalSite) => {
     setSelectedId(site.id);
     setDoubtfulFocusId(null);
+  };
+  const updateMapZoom = (amount: number) => {
+    setMapZoom((current) => Math.min(
+      mapZoomBounds.max,
+      Math.max(mapZoomBounds.min, Math.round((current + amount) * 100) / 100),
+    ));
   };
 
   useEffect(() => {
@@ -252,48 +263,65 @@ export default function Home() {
         </div>
 
         <div className="map-and-records">
-          <div className="coordinate-map" aria-label="Map of the catalogued thermal sites">
+          <div className="coordinate-map" aria-label="Map of the catalogued thermal sites" onWheel={(event) => {
+            const nextZoom = Math.min(
+              mapZoomBounds.max,
+              Math.max(mapZoomBounds.min, Math.round((mapZoom + (event.deltaY < 0 ? mapZoomBounds.step : -mapZoomBounds.step)) * 100) / 100),
+            );
+            if (nextZoom !== mapZoom) {
+              event.preventDefault();
+              setMapZoom(nextZoom);
+            }
+          }}>
             <div className="map-topline"><span><Crosshair size={13} /> geographic reference map</span><span>{thermalSites.length} confirmed{showDoubtful ? ` · ${doubtfulSites.length} doubtful` : ''}</span></div>
-            <svg className="map-geography" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
-              <g className="map-graticule">
-                {[20, 22, 24, 26, 28, 30].map((lng) => {
-                  const [x] = projectPoint([lng, mapBounds.north]);
-                  return <line key={lng} x1={x} x2={x} y1="0" y2="650" />;
-                })}
-                {[39, 40, 41, 42, 43, 44, 45].map((lat) => {
-                  const [, y] = projectPoint([mapBounds.west, lat]);
-                  return <line key={lat} x1="0" x2="1000" y1={y} y2={y} />;
-                })}
-              </g>
-              {showCurrentBorders && <g className="modern-map-layer">
-                {mapData.countries.map((feature) => <path key={feature.name} className="country-shape" d={pathForGeometry(feature.geometry)} fillRule="evenodd" />)}
-                {countryLabels.map((label) => {
-                  const [x, y] = projectPoint([label.lng, label.lat]);
-                  return <text className="country-label" key={label.name} x={x} y={y}>{label.name}</text>;
-                })}
-              </g>}
-              {showRomanEmpire && <g className="roman-map-layer">
-                {mapData.romanProvinces.map((feature) => <path key={feature.name} className="roman-province" d={pathForGeometry(feature.geometry)} fillRule="evenodd" />)}
-                {romanLabels.map((label) => {
-                  const [x, y] = projectPoint([label.lng, label.lat]);
-                  return <text className="roman-label" key={label.name} x={x} y={y}>{label.name}</text>;
-                })}
-              </g>}
-            </svg>
-            <div className="mountain-wash wash-one" />
-            <div className="mountain-wash wash-two" />
-            <div className="map-grid" aria-hidden="true" />
-            <div className="map-axis map-axis-x"><span>22°E</span><span>24°E</span><span>26°E</span><span>28°E</span></div>
-            <div className="map-axis map-axis-y"><span>43°N</span><span>42°N</span><span>41°N</span></div>
-            <span className="place-label label-sofia">SERDICA / SOFIA</span><span className="place-label label-hisarya">HISARYA</span><span className="place-label label-burgas">BURGAS</span><span className="place-label label-rhodope">RHODOPE<br />MOUNTAINS</span>
-            {thermalSites.map((site) => {
-              const isSelected = selected.id === site.id;
-              return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''} ${site.coordinatePrecision === 'area' ? 'is-area' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
-            })}
-            {showDoubtful && doubtfulSites.map((site) => <button type="button" className={`map-marker map-marker-doubtful ${doubtfulFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDoubtfulFocusId(site.id)} aria-pressed={doubtfulFocus?.id === site.id} aria-label={`Inspect doubtful site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DOUBTFUL</b> {site.name}</span></button>)}
-            <div className="map-footnote">
-              <span>Points are named settlement / spring anchors. Country borders locate the modern landscape; Roman provinces are a dated historical reference.</span>
-              <span><a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" target="_blank" rel="noreferrer">Natural Earth 1:50m ↗</a> · <a href="https://services3.arcgis.com/nwUScSWGt2wNe9dC/ArcGIS/rest/services/BA_Map100_Roman_Empire_117AD_Roman_Provinces/FeatureServer/0" target="_blank" rel="noreferrer">GISGILDE / Barrington Atlas, AD 117 ↗</a></span>
+            <div className="map-zoom-layer" style={{ transform: `scale(${mapZoom})` }}>
+              <svg className="map-geography" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
+                <g className="map-graticule">
+                  {[20, 22, 24, 26, 28, 30].map((lng) => {
+                    const [x] = projectPoint([lng, mapBounds.north]);
+                    return <line key={lng} x1={x} x2={x} y1="0" y2="650" />;
+                  })}
+                  {[39, 40, 41, 42, 43, 44, 45].map((lat) => {
+                    const [, y] = projectPoint([mapBounds.west, lat]);
+                    return <line key={lat} x1="0" x2="1000" y1={y} y2={y} />;
+                  })}
+                </g>
+                {showCurrentBorders && <g className="modern-map-layer">
+                  {mapData.countries.map((feature) => <path key={feature.name} className="country-shape" d={pathForGeometry(feature.geometry)} fillRule="evenodd" />)}
+                  {countryLabels.map((label) => {
+                    const [x, y] = projectPoint([label.lng, label.lat]);
+                    return <text className="country-label" key={label.name} x={x} y={y}>{label.name}</text>;
+                  })}
+                </g>}
+                {showRomanEmpire && <g className="roman-map-layer">
+                  {mapData.romanProvinces.map((feature) => <path key={feature.name} className="roman-province" d={pathForGeometry(feature.geometry)} fillRule="evenodd" />)}
+                  {romanLabels.map((label) => {
+                    const [x, y] = projectPoint([label.lng, label.lat]);
+                    return <text className="roman-label" key={label.name} x={x} y={y}>{label.name}</text>;
+                  })}
+                </g>}
+              </svg>
+              <div className="mountain-wash wash-one" />
+              <div className="mountain-wash wash-two" />
+              <div className="map-grid" aria-hidden="true" />
+              <div className="map-axis map-axis-x"><span>22°E</span><span>24°E</span><span>26°E</span><span>28°E</span></div>
+              <div className="map-axis map-axis-y"><span>43°N</span><span>42°N</span><span>41°N</span></div>
+              <span className="place-label label-sofia">SERDICA / SOFIA</span><span className="place-label label-hisarya">HISARYA</span><span className="place-label label-burgas">BURGAS</span><span className="place-label label-rhodope">RHODOPE<br />MOUNTAINS</span>
+              {thermalSites.map((site) => {
+                const isSelected = selected.id === site.id;
+                return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
+              })}
+              {showDoubtful && doubtfulSites.map((site) => <button type="button" className={`map-marker map-marker-doubtful ${doubtfulFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDoubtfulFocusId(site.id)} aria-pressed={doubtfulFocus?.id === site.id} aria-label={`Inspect doubtful site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DOUBTFUL</b> {site.name}</span></button>)}
+              <div className="map-footnote">
+                <span>Points are named settlement / spring anchors. Country borders locate the modern landscape; Roman provinces are a dated historical reference.</span>
+                <span><a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" target="_blank" rel="noreferrer">Natural Earth 1:50m ↗</a> · <a href="https://services3.arcgis.com/nwUScSWGt2wNe9dC/ArcGIS/rest/services/BA_Map100_Roman_Empire_117AD_Roman_Provinces/FeatureServer/0" target="_blank" rel="noreferrer">GISGILDE / Barrington Atlas, AD 117 ↗</a></span>
+              </div>
+            </div>
+            <div className="map-zoom-controls" role="group" aria-label="Map zoom controls">
+              <button type="button" onClick={() => updateMapZoom(mapZoomBounds.step)} disabled={mapZoom >= mapZoomBounds.max} aria-label="Zoom map in" title="Zoom in"><ZoomIn size={15} /></button>
+              <button type="button" onClick={() => updateMapZoom(-mapZoomBounds.step)} disabled={mapZoom <= mapZoomBounds.min} aria-label="Zoom map out" title="Zoom out"><ZoomOut size={15} /></button>
+              <button type="button" onClick={() => setMapZoom(mapZoomBounds.min)} disabled={mapZoom === mapZoomBounds.min} aria-label="Reset map zoom" title="Reset zoom"><RotateCcw size={14} /></button>
+              <span aria-live="polite">{Math.round(mapZoom * 100)}%</span>
             </div>
             {doubtfulFocus && <div className="doubtful-map-card"><button type="button" onClick={() => setDoubtfulFocusId(null)} aria-label="Close doubtful site note">×</button><span><CircleAlert size={13} /> DOUBTFUL / NOT CONFIRMED</span><b>{doubtfulFocus.name}</b><p>{doubtfulFocus.reason}</p><small>{doubtfulFocus.sourcePages} · mapped only to modern locality context</small></div>}
           </div>
@@ -305,7 +333,6 @@ export default function Home() {
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
-              {thermalSites.some((site) => site.coordinatePrecision === 'area') && <span><i className="key-area" />approximate area anchor</span>}
               {showDoubtful && <span><i className="key-doubtful" />doubtful locality</span>}
               <span className="record-key-evidence"><span className="evidence-dots" aria-hidden="true"><i className="is-on" /><i className="is-on" /><i /></span>dots = reported evidence categories</span>
             </div>
@@ -367,7 +394,7 @@ export default function Home() {
 
       <section className="method-section" aria-labelledby="method-title">
         <div className="method-stamp"><span>AV</span><small>2024</small></div>
-          <div><p className="section-kicker">Method & scope</p><h2 id="method-title">Evidence before atmosphere.</h2><p className="method-copy">This atlas follows the dissertation’s confirmed <i>Catalogue of Sites</i> (PDF pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have a plan or excavation plan reproduced in the supplied PDF; each is shown as a labelled source document. The atlas does not invent height, bath geometry or unrecorded dimensions.</p><button type="button" className="caveat-toggle" aria-expanded={showCaveats} onClick={() => setShowCaveats(!showCaveats)}><CircleAlert size={16} /> {showCaveats ? 'Hide' : 'Read'} scope & uncertainty notes</button>{showCaveats && <div className="caveat-box"><p><b>Included:</b> 16 confirmed top-level catalogue entries. Diocletianopolis is represented as one site with five separately catalogued spring sources.</p><p><b>Visible but separate:</b> 11 doubtful localities are amber and dashed on the map, receive written cautions, and never count as confirmed spas or receive reconstructed site views.</p><p><b>Plans:</b> Pautalia, Germania, Serdica, Diocletianopolis, Starozagorski Bani, Haskovski Mineralni Bani and Aquae Calidae have cited plan material in the supplied PDF. A plan is shown as source evidence, never expanded into an unsupported reconstruction.</p><p><b>Map layers:</b> current national borders come from Natural Earth; the Roman provincial reference is GISGILDE’s AD 117 vectorization based on Barrington Atlas Map 100, and is not treated as a time-specific boundary for every AD 46–395 record.</p><p><b>Editorial flags:</b> duplicate printed catalogue numbers, later well analyses, incomplete excavation publication and numerical contradictions stay visible in the relevant dossiers.</p></div>}</div>
+          <div><p className="section-kicker">Method & scope</p><h2 id="method-title">Evidence before atmosphere.</h2><p className="method-copy">This atlas follows the confirmed <i>Catalogue of Sites</i> in Avramova’s dissertation (digital pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have a plan or excavation plan reproduced in the dissertation; each is shown as a labelled source document. The atlas does not invent height, bath geometry or unrecorded dimensions.</p><button type="button" className="caveat-toggle" aria-expanded={showCaveats} onClick={() => setShowCaveats(!showCaveats)}><CircleAlert size={16} /> {showCaveats ? 'Hide' : 'Read'} scope & uncertainty notes</button>{showCaveats && <div className="caveat-box"><p><b>Included:</b> 16 confirmed top-level catalogue entries. Diocletianopolis is represented as one site with five separately catalogued spring sources.</p><p><b>Visible but separate:</b> 11 doubtful localities are amber and dashed on the map, receive written cautions, and never count as confirmed spas or receive reconstructed site views.</p><p><b>Plans:</b> Pautalia, Germania, Serdica, Diocletianopolis, Starozagorski Bani, Haskovski Mineralni Bani and Aquae Calidae have cited plan material in the dissertation. A plan is shown as source evidence, never expanded into an unsupported reconstruction.</p><p><b>Map layers:</b> current national borders come from Natural Earth; the Roman provincial reference is GISGILDE’s AD 117 vectorization based on Barrington Atlas Map 100, and is not treated as a time-specific boundary for every AD 46–395 record.</p><p><b>Editorial flags:</b> duplicate printed catalogue numbers, later well analyses, incomplete excavation publication and numerical contradictions stay visible in the relevant dossiers.</p></div>}</div>
       </section>
 
       <footer className="atlas-footer"><span>THERMAE THRACIAE</span><span>Source-led exploration of Roman thermalism in Thrace</span><span>16 confirmed sites</span></footer>
