@@ -221,6 +221,12 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 @media (min-width: 981px) {
   .map-and-records { align-items: start; }
   .coordinate-map, .record-stack { block-size: 640px; min-height: 0; }
+  .record-list { scrollbar-width: thin; scrollbar-color: #4f918b #101e21; }
+  .record-list::-webkit-scrollbar { width: 10px; }
+  .record-list::-webkit-scrollbar-track { border-left: 1px solid rgba(184,224,219,.12); background: #101e21; }
+  .record-list::-webkit-scrollbar-thumb { border: 2px solid #101e21; background: #4f918b; }
+  .record-list::-webkit-scrollbar-thumb:hover { background: #76cfc7; }
+  .record-list::-webkit-scrollbar-corner { background: #101e21; }
 }
 
 .site-stage { width: min(1400px, calc(100% - 48px)); margin: 0 auto; padding: 112px 0 80px; }
