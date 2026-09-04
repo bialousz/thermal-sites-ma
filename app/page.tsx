@@ -229,6 +229,17 @@ export default function Home() {
       y: Math.max(-maxY, Math.min(maxY, position.y)),
     };
   };
+  const centerMapOnSite = (site: ThermalSite) => {
+    const layer = mapLayerRef.current;
+    if (!layer) return;
+
+    const [x, y] = projectPoint([site.lng, site.lat]);
+    const target = {
+      x: -(x / mapViewBox.width - 0.5) * layer.offsetWidth * mapZoom,
+      y: -(y / mapViewBox.height - 0.5) * layer.offsetHeight * mapZoom,
+    };
+    setMapPan(constrainMapPan(target));
+  };
   const mapCanPan = (zoom = mapZoom) => {
     const viewport = mapViewportRef.current;
     const layer = mapLayerRef.current;
@@ -498,7 +509,7 @@ export default function Home() {
           <aside className="record-stack" aria-label="Visible site records">
             <div className="record-stack-header"><span>Catalogued sites</span><span className="record-count">{thermalSites.length}</span></div>
             <div className="record-list" ref={recordListRef}>
-              {thermalSites.map((site) => <button type="button" data-site-id={site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => selectSite(site)} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
+              {thermalSites.map((site) => <button type="button" data-site-id={site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); centerMapOnSite(site); }} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
