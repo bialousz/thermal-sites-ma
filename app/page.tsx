@@ -318,7 +318,7 @@ export default function Home() {
           <div className="toolbar-controls">
             <label className="dubious-toggle">
               <Checkbox checked={showDubious} onCheckedChange={(checked) => { setShowDubious(checked === true); if (checked !== true) setDubiousFocusId(null); }} />
-              <span>Dubious layer <b>{dubiousSites.length}</b></span>
+              <span>Dubious sites layer <b>{dubiousSites.length}</b></span>
             </label>
             <div className="layer-controls" role="group" aria-label="Map layers">
               <span className="layer-control-label">Map layers</span>
