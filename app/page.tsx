@@ -558,7 +558,6 @@ export default function Home() {
         <section className="source-shelf" aria-labelledby="source-plates-title">
           <div className="source-shelf-heading">
             <div><p className="section-kicker">02a · Verify</p><h3 id="source-plates-title">Supporting material</h3></div>
-            <p>Directly linked dissertation figures and, where available, a credited real-place image. The lead visual is not repeated here.</p>
           </div>
           {selectedSupportingVisuals.length > 0 ? <div className="source-strip">
             {selectedSupportingVisuals.map((asset) => <figure className={`support-card is-${asset.kind}`} key={asset.image}>
@@ -570,7 +569,7 @@ export default function Home() {
       </section>
 
       <section className="catalog-section" aria-labelledby="catalog-title">
-        <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title">The confirmed corpus</h2></div><p>Each tile moves the map and source view to that site. Water metadata is copied as catalogued; cautions stay attached to the records.</p></div>
+        <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title">The confirmed corpus</h2></div></div>
         <div className="catalog-grid">
           {thermalSites.map((site) => <button type="button" key={site.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
         </div>
