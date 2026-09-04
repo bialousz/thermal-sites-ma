@@ -191,6 +191,7 @@ export default function Home() {
   const [mapPan, setMapPan] = useState<MapPan>({ x: 0, y: 0 });
   const [isMapDragging, setIsMapDragging] = useState(false);
   const mapViewportRef = useRef<HTMLDivElement>(null);
+  const mapLayerRef = useRef<HTMLDivElement>(null);
   const recordListRef = useRef<HTMLDivElement>(null);
   const mapDragOrigin = useRef<(MapPan & { pointerId: number; clientX: number; clientY: number }) | null>(null);
   const mapTouchPoints = useRef<Map<number, MapTouchPoint>>(new Map());
@@ -218,14 +219,21 @@ export default function Home() {
   };
   const constrainMapPan = (position: MapPan, zoom = mapZoom) => {
     const viewport = mapViewportRef.current?.getBoundingClientRect();
-    if (!viewport || zoom <= mapZoomBounds.min) return { x: 0, y: 0 };
+    const layer = mapLayerRef.current;
+    if (!viewport || !layer) return { x: 0, y: 0 };
 
-    const maxX = (viewport.width * (zoom - 1)) / 2;
-    const maxY = (viewport.height * (zoom - 1)) / 2;
+    const maxX = Math.max(0, (layer.offsetWidth * zoom - viewport.width) / 2);
+    const maxY = Math.max(0, (layer.offsetHeight * zoom - viewport.height) / 2);
     return {
       x: Math.max(-maxX, Math.min(maxX, position.x)),
       y: Math.max(-maxY, Math.min(maxY, position.y)),
     };
+  };
+  const mapCanPan = (zoom = mapZoom) => {
+    const viewport = mapViewportRef.current;
+    const layer = mapLayerRef.current;
+    if (!viewport || !layer) return zoom > mapZoomBounds.min;
+    return layer.offsetWidth * zoom > viewport.clientWidth + 1 || layer.offsetHeight * zoom > viewport.clientHeight + 1;
   };
   const setMapViewZoom = (nextZoom: number) => {
     const boundedZoom = Math.min(
@@ -250,7 +258,7 @@ export default function Home() {
     setMapPan((current) => constrainMapPan({ x: current.x + x, y: current.y + y }));
   };
   const startMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (mapZoom <= mapZoomBounds.min || event.button !== 0) return;
+    if (!mapCanPan() || event.button !== 0) return;
     if ((event.target as Element).closest('button, a')) return;
 
     event.preventDefault();
@@ -284,7 +292,7 @@ export default function Home() {
       return;
     }
 
-    if (mapZoom > mapZoomBounds.min) startMapDrag(event);
+    if (mapCanPan()) startMapDrag(event);
   };
   const moveMap = (event: ReactPointerEvent<HTMLDivElement>) => {
     const origin = mapDragOrigin.current;
@@ -324,7 +332,7 @@ export default function Home() {
     if (mapTouchPoints.current.size < 2) mapPinchOrigin.current = null;
 
     const remainingTouch = [...mapTouchPoints.current.values()][0];
-    if (remainingTouch && mapZoom > mapZoomBounds.min) {
+    if (remainingTouch && mapCanPan()) {
       mapDragOrigin.current = { ...mapPan, ...remainingTouch };
       setIsMapDragging(true);
     } else {
@@ -334,7 +342,7 @@ export default function Home() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
   const handleMapKeyboardPan = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-    if (mapZoom <= mapZoomBounds.min) return;
+    if (!mapCanPan()) return;
 
     const distance = event.shiftKey ? 90 : 42;
     const directions: Record<string, MapPan> = {
@@ -417,7 +425,7 @@ export default function Home() {
             className={`coordinate-map ${mapZoom > mapZoomBounds.min ? 'is-pannable' : ''} ${isMapDragging ? 'is-dragging' : ''}`}
             role="region"
             tabIndex={0}
-            aria-label="Interactive map of catalogued thermal sites. Use the controls, scroll wheel, or pinch gesture to zoom; drag or use the arrow keys to pan after zooming in."
+            aria-label="Interactive map of catalogued thermal sites. Use the controls, scroll wheel, or pinch gesture to zoom; drag or use the arrow keys to pan."
             onWheel={(event) => {
             const nextZoom = Math.min(
               mapZoomBounds.max,
@@ -435,7 +443,7 @@ export default function Home() {
             onKeyDown={handleMapKeyboardPan}
           >
             <div className="map-topline"><span><Crosshair size={13} /> geographic reference map</span><span>{thermalSites.length} confirmed{showDubious ? ` · ${dubiousSites.length} dubious` : ''}</span></div>
-            <div className="map-zoom-layer" style={{ transform: `translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapZoom})` }}>
+            <div ref={mapLayerRef} className="map-zoom-layer" style={{ transform: `translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapZoom})` }}>
               <svg className="map-geography" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
                 <g className="map-graticule">
                   {[20, 22, 24, 26, 28, 30].map((lng) => {
@@ -473,10 +481,10 @@ export default function Home() {
                 return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectMapSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
               })}
               {showDubious && dubiousSites.map((site) => <button type="button" className={`map-marker map-marker-dubious ${dubiousFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDubiousFocusId(site.id)} aria-pressed={dubiousFocus?.id === site.id} aria-label={`Inspect dubious site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DUBIOUS</b> {site.name}</span></button>)}
-              <div className="map-footnote">
-                <span>Points are named settlement / spring anchors. Country borders locate the modern landscape; Roman provinces are a dated historical reference.</span>
-                <span><a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" target="_blank" rel="noreferrer">Natural Earth 1:50m ↗</a> · <a href="https://services3.arcgis.com/nwUScSWGt2wNe9dC/ArcGIS/rest/services/BA_Map100_Roman_Empire_117AD_Roman_Provinces/FeatureServer/0" target="_blank" rel="noreferrer">GISGILDE / Barrington Atlas, AD 117 ↗</a></span>
-              </div>
+            </div>
+            <div className="map-footnote">
+              <span>Points are named settlement / spring anchors. Country borders locate the modern landscape; Roman provinces are a dated historical reference.</span>
+              <span><a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/" target="_blank" rel="noreferrer">Natural Earth 1:50m ↗</a> · <a href="https://services3.arcgis.com/nwUScSWGt2wNe9dC/ArcGIS/rest/services/BA_Map100_Roman_Empire_117AD_Roman_Provinces/FeatureServer/0" target="_blank" rel="noreferrer">GISGILDE / Barrington Atlas, AD 117 ↗</a></span>
             </div>
             <div className="map-zoom-controls" role="group" aria-label="Map zoom controls">
               <button type="button" onClick={() => updateMapZoom(mapZoomBounds.step)} disabled={mapZoom >= mapZoomBounds.max} aria-label="Zoom map in" title="Zoom in"><ZoomIn size={15} /></button>
