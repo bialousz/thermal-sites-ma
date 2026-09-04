@@ -328,7 +328,7 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 }
 
 @media (max-width: 980px) {
-  .site-stage { padding: 58px 0 70px; }.stage-grid { grid-template-columns: 1fr; }.site-dossier { min-height: 0; }.site-visual { grid-template-rows: auto minmax(330px, 58vw) auto; }.source-shelf-heading { align-items: start; flex-direction: column; gap: 10px; }
+  .coordinate-map { min-height: 0; aspect-ratio: 1000 / 650; }.site-stage { padding: 58px 0 70px; }.stage-grid { grid-template-columns: 1fr; }.site-dossier { min-height: 0; }.site-visual { grid-template-rows: auto minmax(330px, 58vw) auto; }.source-shelf-heading { align-items: start; flex-direction: column; gap: 10px; }
 }
 
 @media (max-width: 640px) {
