@@ -210,7 +210,12 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 .record-stack { display: flex; min-height: 640px; flex-direction: column; border: 1px solid rgba(184,224,219,.22); background: #172629; }
 .record-stack-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid rgba(184,224,219,.16); color: #cfe0d9; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; font-weight: 800; }
 .record-count { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid #4f7772; border-radius: 50%; color: var(--water-pale); }
-.record-list { flex: 1; overflow: auto; padding: 7px; }
+.record-list { flex: 1; overflow: auto; padding: 7px; scrollbar-width: thin; scrollbar-color: #4f918b #101e21; }
+.record-list::-webkit-scrollbar { width: 10px; }
+.record-list::-webkit-scrollbar-track { border-left: 1px solid rgba(184,224,219,.12); background: #101e21; }
+.record-list::-webkit-scrollbar-thumb { border: 2px solid #101e21; background: #4f918b; }
+.record-list::-webkit-scrollbar-thumb:hover { background: #76cfc7; }
+.record-list::-webkit-scrollbar-corner { background: #101e21; }
 .record-row { width: 100%; display: grid; grid-template-columns: 41px minmax(0,1fr) 32px; gap: 7px; align-items: center; padding: 10px 7px; border: 1px solid transparent; background: transparent; color: #cfdbd4; text-align: left; transition: background .18s, border .18s; }
 .record-row:hover, .record-row.is-selected { background: rgba(102,169,165,.13); border-color: rgba(123,208,199,.36); }.record-index { color: #75cfc8; font-size: 10px; font-weight: 800; }.record-name { min-width: 0; display: flex; flex-direction: column; gap: 3px; }.record-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--serif); font-size: 16px; font-weight: 400; }.record-name small { color: #91a39e; font-size: 10px; }
 .evidence-dots { display: inline-flex; justify-content: end; gap: 4px; }.evidence-dots i { width: 5px; height: 5px; border: 1px solid #54706c; border-radius: 50%; }.evidence-dots i.is-on { border-color: var(--water); background: var(--water); }.record-key { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 11px; padding: 13px 16px; border-top: 1px solid rgba(184,224,219,.16); color: #91a39e; font-size: 9px; letter-spacing: .04em; }.record-key > span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }.record-key > span > i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }.record-key .key-confirmed { background: #7ce1dd; }.record-key .key-dubious { border: 1px dashed #f4d29a; background: #e7ab57; }.record-key-evidence { margin-left: auto; color: #77918b; }.record-key .evidence-dots { gap: 2px; }.record-key .evidence-dots i { width: 4px; height: 4px; border-color: #59706b; }.record-key .evidence-dots i.is-on { border-color: #7ce1dd; background: #7ce1dd; }
@@ -221,12 +226,6 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 @media (min-width: 981px) {
   .map-and-records { align-items: start; }
   .coordinate-map, .record-stack { block-size: 640px; min-height: 0; }
-  .record-list { scrollbar-width: thin; scrollbar-color: #4f918b #101e21; }
-  .record-list::-webkit-scrollbar { width: 10px; }
-  .record-list::-webkit-scrollbar-track { border-left: 1px solid rgba(184,224,219,.12); background: #101e21; }
-  .record-list::-webkit-scrollbar-thumb { border: 2px solid #101e21; background: #4f918b; }
-  .record-list::-webkit-scrollbar-thumb:hover { background: #76cfc7; }
-  .record-list::-webkit-scrollbar-corner { background: #101e21; }
 }
 
 .site-stage { width: min(1400px, calc(100% - 48px)); margin: 0 auto; padding: 112px 0 80px; }
