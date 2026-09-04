@@ -1,23 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight,
   BookOpenText,
   CircleAlert,
   Compass,
   Crosshair,
+  ExternalLink,
   Landmark,
   MapPinned,
+  Maximize2,
   Sparkles,
   Waves,
+  X,
 } from 'lucide-react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { doubtfulSites, thermalSites, type SourceFigure, type ThermalSite } from './atlas-data';
 import mapGeodata from './map-geodata.json';
 
-const mapBounds = { west: 22.1, east: 27.9, north: 43.25, south: 40.65 };
+const mapBounds = { west: 21.8, east: 28.9, north: 44.45, south: 40.65 };
 const mapViewBox = { width: 1000, height: 650 };
 
 type MapPoint = [number, number];
@@ -29,17 +32,18 @@ type MapFeature = { name: string; geometry: MapGeometry };
 const mapData = mapGeodata as unknown as { countries: MapFeature[]; romanProvinces: MapFeature[] };
 
 const countryLabels = [
-  { name: 'SERBIA', lng: 22.55, lat: 43.02 },
-  { name: 'BULGARIA', lng: 24.55, lat: 42.98 },
-  { name: 'GREECE', lng: 24.9, lat: 40.93 },
-  { name: 'TÜRKIYE', lng: 27.45, lat: 40.95 },
+  { name: 'SERBIA', lng: 22.55, lat: 43.5 },
+  { name: 'ROMANIA', lng: 25.65, lat: 44.12 },
+  { name: 'BULGARIA', lng: 25.15, lat: 43.02 },
+  { name: 'GREECE', lng: 24.9, lat: 41.08 },
+  { name: 'TÜRKIYE', lng: 27.65, lat: 41.12 },
 ];
 
 const romanLabels = [
-  { name: 'MOESIA SUPERIOR', lng: 22.7, lat: 42.7 },
-  { name: 'MOESIA INFERIOR', lng: 26.15, lat: 42.92 },
-  { name: 'THRACIA', lng: 25.7, lat: 42.2 },
-  { name: 'MACEDONIA', lng: 23.55, lat: 41.13 },
+  { name: 'MOESIA SUPERIOR', lng: 22.8, lat: 43.12 },
+  { name: 'MOESIA INFERIOR', lng: 26.4, lat: 43.48 },
+  { name: 'THRACIA', lng: 25.8, lat: 42.32 },
+  { name: 'MACEDONIA', lng: 23.55, lat: 41.3 },
 ];
 
 function projectPoint([lng, lat]: MapPoint) {
@@ -175,6 +179,7 @@ export default function Home() {
   const [showCurrentBorders, setShowCurrentBorders] = useState(true);
   const [showRomanEmpire, setShowRomanEmpire] = useState(true);
   const [doubtfulFocusId, setDoubtfulFocusId] = useState<string | null>(null);
+  const [activeVisual, setActiveVisual] = useState<DisplayVisual | null>(null);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
   const selectedVisual = primaryVisual(selected);
@@ -184,6 +189,22 @@ export default function Home() {
     setSelectedId(site.id);
     setDoubtfulFocusId(null);
   };
+
+  useEffect(() => {
+    if (!activeVisual) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setActiveVisual(null);
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [activeVisual]);
   return (
     <main className="atlas-shell">
       <header className="atlas-header">
@@ -302,7 +323,7 @@ export default function Home() {
           {selectedVisual ? <article className={`site-visual is-${selectedVisual.kind}`}>
             <div className="site-visual-topline"><span>{selectedVisual.label}</span><span>{selectedVisual.kind === 'plan' ? 'CITED DOCUMENT' : selectedVisual.kind === 'photo' ? 'PLACE IMAGE' : 'SOURCE IMAGE'}</span></div>
             <div className="site-visual-frame">
-              {selectedVisual.href ? <a href={selectedVisual.href} target="_blank" rel="noreferrer" aria-label={`Open source for ${selectedVisual.caption}`}><img src={selectedVisual.image} alt={selectedVisual.caption} /></a> : <img src={selectedVisual.image} alt={selectedVisual.caption} />}
+              <button type="button" className="visual-image-trigger" onClick={() => setActiveVisual(selectedVisual)} aria-label={`View ${selectedVisual.caption} at full size`}><img src={selectedVisual.image} alt={selectedVisual.caption} /><span><Maximize2 size={14} /> View full image</span></button>
             </div>
             <div className="site-visual-caption"><div><span>{selectedVisual.figure}</span><h3>{selectedVisual.caption}</h3></div><p>{visualScope(selected, selectedVisual)}</p></div>
           </article> : <article className="site-visual is-empty"><p>Source image pending</p><span>The catalogue record remains available at right.</span></article>}
@@ -326,7 +347,7 @@ export default function Home() {
           </div>
           {selectedSupportingVisuals.length > 0 ? <div className="source-strip">
             {selectedSupportingVisuals.map((asset) => <figure className={`support-card is-${asset.kind}`} key={asset.image}>
-              {asset.href ? <a href={asset.href} target="_blank" rel="noreferrer" aria-label={`Open source for ${asset.caption}`}><img src={asset.image} alt={asset.caption} /></a> : <img src={asset.image} alt={asset.caption} />}
+              <button type="button" className="support-image-trigger" onClick={() => setActiveVisual(asset)} aria-label={`View ${asset.caption} at full size`}><img src={asset.image} alt={asset.caption} /><span><Maximize2 size={14} /></span></button>
               <figcaption><span>{asset.label}</span><p>{asset.caption}</p><small>{asset.figure}</small></figcaption>
             </figure>)}
           </div> : <div className="source-empty"><span>Single-source record</span><p>The lead visual is the only reusable site material currently reproduced in the supplied dissertation.</p></div>}
@@ -350,6 +371,14 @@ export default function Home() {
       </section>
 
       <footer className="atlas-footer"><span>THERMAE THRACIAE</span><span>Source-led exploration of Roman thermalism in Thrace</span><span>16 confirmed sites</span></footer>
+
+      {activeVisual && <div className="image-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" onClick={() => setActiveVisual(null)}>
+        <section className={`lightbox-panel is-${activeVisual.kind}`} onClick={(event) => event.stopPropagation()}>
+          <button type="button" className="lightbox-close" onClick={() => setActiveVisual(null)} aria-label="Close full image" autoFocus><X size={20} /></button>
+          <div className="lightbox-media"><img src={activeVisual.image} alt={activeVisual.caption} /></div>
+          <div className="lightbox-caption"><div><span>{activeVisual.label}</span><h2 id="lightbox-title">{activeVisual.caption}</h2><p>{activeVisual.figure}</p></div>{activeVisual.href && <a href={activeVisual.href} target="_blank" rel="noreferrer">Open credited source <ExternalLink size={14} /></a>}</div>
+        </section>
+      </div>}
     </main>
   );
 }
