@@ -2,8 +2,7 @@
 
 An interactive, source-led atlas of Roman thermalism in present-day Bulgaria.
 
-**Live atlas:** [thermae-thraciae-atlas.abialousz773445.chatgpt.site](https://thermae-thraciae-atlas.abialousz773445.chatgpt.site)  
-The published atlas is private and requires ChatGPT sign-in.
+**Live atlas:** [thermal-thraciae.netlify.app](https://thermal-thraciae.netlify.app/)
 
 ## What this project does
 
@@ -41,7 +40,8 @@ The dissertation’s own heading, **“Dubious sites”** (printed p. 246), is r
 | `app/map-geodata.json` | Simplified geographic reference data for the two map layers. |
 | `app/globals.css` | Visual language, responsive layout, map, cards, and accessibility states. |
 | `public/archive-plates/` | Extracted plans, archive plates, and supporting visual evidence. |
-| `.openai/hosting.json` | Hosting-project configuration. |
+| `next.config.ts` | Static-export configuration for the atlas. |
+| `netlify.toml` | Netlify build command, publish directory, and Node runtime. |
 
 ## Local development
 
@@ -58,6 +58,28 @@ Run the production build with:
 npm run build
 npx tsc --noEmit
 ```
+
+The production build pre-renders the atlas as static HTML and assets in `dist/client/`. No server-side application runtime is required.
+
+## Deploying with Netlify
+
+The repository is configured for Git-based Netlify deployment from the `main` branch. `netlify.toml` supplies the required settings:
+
+| Setting | Value |
+| --- | --- |
+| Base directory | Repository root |
+| Build command | `npm run build` |
+| Publish directory | `dist/client` |
+| Node version | `22.13.0` |
+
+To publish an update:
+
+1. Commit and push changes to `main` on GitHub.
+2. Netlify runs the static export automatically.
+3. Check the deploy log for a successful `Pre-rendering all routes` step and confirm that `dist/client/index.html` was published.
+4. Open the deploy preview, test the map, site selection, image lightbox, and a narrow browser width, then publish the production deploy.
+
+Do not change the publish directory to `dist`: that folder also contains build intermediates. Netlify should publish only `dist/client`.
 
 ## Editorial guardrails
 
