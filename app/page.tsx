@@ -29,6 +29,8 @@ const mapZoomBounds = { min: 1, max: 2.25, step: 0.15 };
 
 type MapPoint = [number, number];
 type MapPan = { x: number; y: number };
+type MapTouchPoint = { pointerId: number; clientX: number; clientY: number };
+type MapPinch = { distance: number; zoom: number };
 type MapGeometry =
   | { type: 'Polygon'; coordinates: MapPoint[][] }
   | { type: 'MultiPolygon'; coordinates: MapPoint[][][] };
@@ -190,6 +192,8 @@ export default function Home() {
   const [isMapDragging, setIsMapDragging] = useState(false);
   const mapViewportRef = useRef<HTMLDivElement>(null);
   const mapDragOrigin = useRef<(MapPan & { pointerId: number; clientX: number; clientY: number }) | null>(null);
+  const mapTouchPoints = useRef<Map<number, MapTouchPoint>>(new Map());
+  const mapPinchOrigin = useRef<MapPinch | null>(null);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
   const selectedVisual = primaryVisual(selected);
@@ -226,6 +230,8 @@ export default function Home() {
     setMapPan({ x: 0, y: 0 });
     setIsMapDragging(false);
     mapDragOrigin.current = null;
+    mapTouchPoints.current.clear();
+    mapPinchOrigin.current = null;
   };
   const panMapBy = (x: number, y: number) => {
     setMapPan((current) => constrainMapPan({ x: current.x + x, y: current.y + y }));
@@ -239,6 +245,34 @@ export default function Home() {
     mapDragOrigin.current = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, ...mapPan };
     setIsMapDragging(true);
   };
+  const touchPairDistance = () => {
+    const [first, second] = [...mapTouchPoints.current.values()];
+    if (!first || !second) return 0;
+    return Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY);
+  };
+  const startMapTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if ((event.target as Element).closest('button, a')) return;
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    mapTouchPoints.current.set(event.pointerId, {
+      pointerId: event.pointerId,
+      clientX: event.clientX,
+      clientY: event.clientY,
+    });
+
+    if (mapTouchPoints.current.size >= 2) {
+      const distance = touchPairDistance();
+      if (distance > 0) {
+        mapPinchOrigin.current = { distance, zoom: mapZoom };
+        mapDragOrigin.current = null;
+        setIsMapDragging(false);
+        event.preventDefault();
+      }
+      return;
+    }
+
+    if (mapZoom > mapZoomBounds.min) startMapDrag(event);
+  };
   const moveMap = (event: ReactPointerEvent<HTMLDivElement>) => {
     const origin = mapDragOrigin.current;
     if (!origin || origin.pointerId !== event.pointerId) return;
@@ -248,12 +282,42 @@ export default function Home() {
       y: origin.y + event.clientY - origin.clientY,
     }));
   };
+  const moveMapTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const current = mapTouchPoints.current.get(event.pointerId);
+    if (!current) return;
+
+    mapTouchPoints.current.set(event.pointerId, { ...current, clientX: event.clientX, clientY: event.clientY });
+    const pinch = mapPinchOrigin.current;
+    if (!pinch || mapTouchPoints.current.size < 2) {
+      moveMap(event);
+      return;
+    }
+
+    const distance = touchPairDistance();
+    if (distance <= 0) return;
+    event.preventDefault();
+    setMapViewZoom(pinch.zoom * (distance / pinch.distance));
+  };
   const endMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     const origin = mapDragOrigin.current;
     if (!origin || origin.pointerId !== event.pointerId) return;
 
     mapDragOrigin.current = null;
     setIsMapDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+  const endMapTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
+    mapTouchPoints.current.delete(event.pointerId);
+    if (mapTouchPoints.current.size < 2) mapPinchOrigin.current = null;
+
+    const remainingTouch = [...mapTouchPoints.current.values()][0];
+    if (remainingTouch && mapZoom > mapZoomBounds.min) {
+      mapDragOrigin.current = { ...mapPan, ...remainingTouch };
+      setIsMapDragging(true);
+    } else {
+      endMapDrag(event);
+    }
+
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
   const handleMapKeyboardPan = (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -340,7 +404,7 @@ export default function Home() {
             className={`coordinate-map ${mapZoom > mapZoomBounds.min ? 'is-pannable' : ''} ${isMapDragging ? 'is-dragging' : ''}`}
             role="region"
             tabIndex={0}
-            aria-label="Interactive map of catalogued thermal sites. Use the map controls or scroll to zoom; drag or use the arrow keys to pan after zooming in."
+            aria-label="Interactive map of catalogued thermal sites. Use the controls, scroll wheel, or pinch gesture to zoom; drag or use the arrow keys to pan after zooming in."
             onWheel={(event) => {
             const nextZoom = Math.min(
               mapZoomBounds.max,
@@ -351,10 +415,10 @@ export default function Home() {
               setMapViewZoom(nextZoom);
             }
             }}
-            onPointerDown={startMapDrag}
-            onPointerMove={moveMap}
-            onPointerUp={endMapDrag}
-            onPointerCancel={endMapDrag}
+            onPointerDown={(event) => event.pointerType === 'touch' ? startMapTouch(event) : startMapDrag(event)}
+            onPointerMove={(event) => event.pointerType === 'touch' ? moveMapTouch(event) : moveMap(event)}
+            onPointerUp={(event) => event.pointerType === 'touch' ? endMapTouch(event) : endMapDrag(event)}
+            onPointerCancel={(event) => event.pointerType === 'touch' ? endMapTouch(event) : endMapDrag(event)}
             onKeyDown={handleMapKeyboardPan}
           >
             <div className="map-topline"><span><Crosshair size={13} /> geographic reference map</span><span>{thermalSites.length} confirmed{showDubious ? ` · ${dubiousSites.length} dubious` : ''}</span></div>
