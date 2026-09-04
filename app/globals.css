@@ -215,6 +215,14 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 .record-row:hover, .record-row.is-selected { background: rgba(102,169,165,.13); border-color: rgba(123,208,199,.36); }.record-index { color: #75cfc8; font-size: 10px; font-weight: 800; }.record-name { min-width: 0; display: flex; flex-direction: column; gap: 3px; }.record-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--serif); font-size: 16px; font-weight: 400; }.record-name small { color: #91a39e; font-size: 10px; }
 .evidence-dots { display: inline-flex; justify-content: end; gap: 4px; }.evidence-dots i { width: 5px; height: 5px; border: 1px solid #54706c; border-radius: 50%; }.evidence-dots i.is-on { border-color: var(--water); background: var(--water); }.record-key { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 11px; padding: 13px 16px; border-top: 1px solid rgba(184,224,219,.16); color: #91a39e; font-size: 9px; letter-spacing: .04em; }.record-key > span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }.record-key > span > i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }.record-key .key-confirmed { background: #7ce1dd; }.record-key .key-dubious { border: 1px dashed #f4d29a; background: #e7ab57; }.record-key-evidence { margin-left: auto; color: #77918b; }.record-key .evidence-dots { gap: 2px; }.record-key .evidence-dots i { width: 4px; height: 4px; border-color: #59706b; }.record-key .evidence-dots i.is-on { border-color: #7ce1dd; background: #7ce1dd; }
 
+/* The map and record panel are a paired desktop viewport. Their contents can
+   change (for example, when the dubious-marker key is hidden), but that must
+   not alter the map's measured size. */
+@media (min-width: 981px) {
+  .map-and-records { align-items: start; }
+  .coordinate-map, .record-stack { block-size: 640px; min-height: 0; }
+}
+
 .site-stage { width: min(1400px, calc(100% - 48px)); margin: 0 auto; padding: 112px 0 80px; }
 .stage-titlebar { margin-bottom: 28px; }.stage-titlebar h2 { font-size: clamp(2.5rem, 5vw, 4.7rem); line-height: .93; }.stage-titlebar h2 span { color: #5a8784; font-family: var(--sans); font-size: .29em; letter-spacing: .04em; vertical-align: top; }.site-next { display: inline-flex; align-items: center; gap: 7px; padding: 11px 14px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font-size: 12px; font-weight: 800; transition: background .18s, color .18s; }.site-next:hover { background: var(--ink); color: white; }
 .stage-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(315px, .65fr); align-items: stretch; gap: 16px; }
