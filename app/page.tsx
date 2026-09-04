@@ -191,6 +191,7 @@ export default function Home() {
   const [mapPan, setMapPan] = useState<MapPan>({ x: 0, y: 0 });
   const [isMapDragging, setIsMapDragging] = useState(false);
   const mapViewportRef = useRef<HTMLDivElement>(null);
+  const recordListRef = useRef<HTMLDivElement>(null);
   const mapDragOrigin = useRef<(MapPan & { pointerId: number; clientX: number; clientY: number }) | null>(null);
   const mapTouchPoints = useRef<Map<number, MapTouchPoint>>(new Map());
   const mapPinchOrigin = useRef<MapPinch | null>(null);
@@ -202,6 +203,18 @@ export default function Home() {
   const selectSite = (site: ThermalSite) => {
     setSelectedId(site.id);
     setDubiousFocusId(null);
+  };
+  const selectMapSite = (site: ThermalSite) => {
+    selectSite(site);
+
+    const list = recordListRef.current;
+    const row = list?.querySelector<HTMLElement>(`[data-site-id="${site.id}"]`);
+    if (!list || !row) return;
+
+    const listBounds = list.getBoundingClientRect();
+    const rowBounds = row.getBoundingClientRect();
+    const centeredTop = list.scrollTop + rowBounds.top - listBounds.top - (listBounds.height - rowBounds.height) / 2;
+    list.scrollTo({ top: Math.max(0, centeredTop), behavior: 'smooth' });
   };
   const constrainMapPan = (position: MapPan, zoom = mapZoom) => {
     const viewport = mapViewportRef.current?.getBoundingClientRect();
@@ -457,7 +470,7 @@ export default function Home() {
               <span className="place-label label-sofia">SERDICA / SOFIA</span><span className="place-label label-hisarya">HISARYA</span><span className="place-label label-burgas">BURGAS</span><span className="place-label label-rhodope">RHODOPE<br />MOUNTAINS</span>
               {thermalSites.map((site) => {
                 const isSelected = selected.id === site.id;
-                return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
+                return <button type="button" className={`map-marker ${isSelected ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => selectMapSite(site)} aria-pressed={isSelected} aria-label={`Select ${primaryName(site)}, ${site.currentName}`}><span className="marker-core"><i /></span><span className="marker-label"><b>{site.catalogueNo}</b> {primaryName(site)}</span></button>;
               })}
               {showDubious && dubiousSites.map((site) => <button type="button" className={`map-marker map-marker-dubious ${dubiousFocus?.id === site.id ? 'is-selected' : ''}`} key={site.id} style={mapPosition(site)} onClick={() => setDubiousFocusId(site.id)} aria-pressed={dubiousFocus?.id === site.id} aria-label={`Inspect dubious site: ${site.name}`}><span className="marker-core"><i /></span><span className="marker-label"><b>DUBIOUS</b> {site.name}</span></button>)}
               <div className="map-footnote">
@@ -476,8 +489,8 @@ export default function Home() {
 
           <aside className="record-stack" aria-label="Visible site records">
             <div className="record-stack-header"><span>Catalogued sites</span><span className="record-count">{thermalSites.length}</span></div>
-            <div className="record-list">
-              {thermalSites.map((site) => <button type="button" className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => selectSite(site)} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
+            <div className="record-list" ref={recordListRef}>
+              {thermalSites.map((site) => <button type="button" data-site-id={site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => selectSite(site)} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
