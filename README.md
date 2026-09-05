@@ -12,8 +12,9 @@ Thermae Thraciae turns the site catalogue in Mariya Avramova’s doctoral disser
 - 11 **Dubious sites**, kept visibly separate from the confirmed corpus. They are shown as amber dashed locality markers with an evidence note, not as confirmed spas or reconstructions.
 - An interactive geographic map with current national borders and an AD 117 Roman provincial reference layer.
 - Click-to-expand source imagery and plans, so field photographs, archive plates, and diagrams can be read at full size.
+- Experimental 3D plan reliefs for two audited footprints: Momina salza at Diocletianopolis and selected fabric at Starozagorski Bani. Other sites have no 3D model.
 
-The experience is deliberately evidence-first: a plan is shown as a cited document, never transformed into an unsupported reconstruction.
+The experience is deliberately evidence-first: each relief preserves source-image proportions and openings. Its constant display height is explicitly schematic, with no restored roofs, missing walls or ancient elevations. An aligned source underlay allows direct comparison. See [the 3D evidence audit](docs/3d-plans/README.md) for included scope, trace overlays, citations and reasons for excluding the other plans.
 
 ## Research basis
 
@@ -31,6 +32,7 @@ The dissertation’s own heading, **“Dubious sites”** (printed p. 246), is r
 4. Click any plan or supporting image to open the image reader. Use its arrows or your keyboard’s left/right arrows to browse the record’s images. Source-specific notes and credits remain attached; **Open original image** opens the image separately.
 5. Close the image reader with its close button or Escape; keyboard focus returns to the image you opened.
 6. Amber dashed markers open separate **Dubious sites** notes with the locality, evidence caution and citation. These records are excluded from the confirmed total; Traianopolis is in present-day Greece.
+7. Records marked **3D** have an **Explore in 3D** option below the dossier. Rotate or zoom the relief, switch to top view, turn on the source underlay, or select a feature. Keyboard controls and pan buttons are provided. **Larger view** expands the canvas within the page. Devices without WebGL2 retain the original source image.
 
 ## Project structure
 
@@ -40,6 +42,10 @@ The dissertation’s own heading, **“Dubious sites”** (printed p. 246), is r
 | `app/atlas-data.ts` | Curated confirmed and dubious site records, citations, and image metadata. |
 | `app/map-geodata.json` | Simplified geographic reference data for the two map layers. |
 | `app/globals.css` | Visual language, responsive layout, map, cards, and accessibility states. |
+| `app/plan-explorer.tsx` / `app/plan-explorer.css` | Responsive 3D workbench, controls, source comparison and evidence notes. |
+| `app/plan-scene.ts` | On-demand Three.js rendering, shared source/geometry transform, picking and resource cleanup. |
+| `app/plan-models/` | Reviewed source-coordinate polygons; only these assets enable 3D. |
+| `docs/3d-plans/` | Model eligibility, source provenance, limitations and verification overlays. |
 | `public/archive-plates/` | Extracted plans, archive plates, and supporting visual evidence. |
 | `next.config.ts` | Static-export configuration for the atlas. |
 | `netlify.toml` | Netlify build command, publish directory, and Node runtime. |
@@ -58,6 +64,7 @@ Run the production build with:
 ```bash
 npm run build
 npx tsc --noEmit
+node --test tests/plan-models.test.mjs
 ```
 
 The production build pre-renders the atlas as static HTML and assets in `dist/client/`. No server-side application runtime is required.
@@ -86,6 +93,7 @@ Do not change the publish directory to `dist`: that folder also contains build i
 
 - Preserve the distinction between **confirmed** and **dubious** records.
 - Do not infer building dimensions, elevations, rooms, or reconstructions that are not documented in the cited evidence.
+- A plan image or a confidence label never enables 3D by itself. Add a reviewed source-coordinate asset to the explicit allowlist only after verifying the footprint. Unknown vertical dimensions must stay unknown; uniform relief is a display convention.
 - Keep image captions, source credits, and dissertation page references with the visual or claim they support.
 - If a coordinate is only a modern locality context, describe it as such rather than presenting it as an excavated bath location.
 

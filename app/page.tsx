@@ -5,6 +5,7 @@ import {
   ArrowRight,
   ArrowLeft,
   BookOpenText,
+  Box,
   CircleAlert,
   Compass,
   Crosshair,
@@ -24,6 +25,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { dubiousSites, thermalSites, type SourceFigure, type ThermalSite } from './atlas-data';
 import mapGeodata from './map-geodata.json';
+import { PlanExplorer } from './plan-explorer';
+import { planExclusions, planModelForSite } from './plan-models';
 
 const mapBounds = { west: 21.8, east: 28.9, north: 44.45, south: 40.65 };
 const mapViewBox = { width: 1000, height: 650 };
@@ -205,6 +208,7 @@ export default function Home() {
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
+  const selectedPlanModel = planModelForSite(selected.id);
   const selectedVisual = primaryVisual(selected);
   const selectedSupportingVisuals = supportingVisuals(selected, selectedVisual?.image);
   const selectedVisuals = [selectedVisual, ...selectedSupportingVisuals].filter((visual): visual is DisplayVisual => Boolean(visual));
@@ -548,7 +552,7 @@ export default function Home() {
           <aside className="record-stack" aria-label="Visible site records">
             <div className="record-stack-header"><span>Catalogued sites</span><span className="record-count">{thermalSites.length}</span></div>
             <div className="record-list" ref={recordListRef}>
-              {thermalSites.map((site) => <button type="button" data-site-id={site.id} aria-pressed={selected.id === site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); centerMapOnSite(site); }} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
+              {thermalSites.map((site) => <button type="button" data-site-id={site.id} aria-pressed={selected.id === site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); centerMapOnSite(site); }} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}{planModelForSite(site.id) && <span className="record-model-badge"><Box size={11} /> 3D</span>}</small></span><EvidenceDots site={site} /></button>)}
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
@@ -587,6 +591,8 @@ export default function Home() {
           </article>
         </div>
 
+        {selectedPlanModel ? <PlanExplorer key={selected.id} model={selectedPlanModel} onOpenSource={(opener) => openVisual({ image: selectedPlanModel.image, caption: selectedPlanModel.title, figure: selectedPlanModel.figure, label: 'MODEL SOURCE PLAN', note: selectedPlanModel.scope, kind: 'plan' }, opener)} /> : selected.plan && <p className="plan-availability"><b>3D model omitted.</b> {planExclusions[selected.id] ?? 'This source does not yet support an accurate model.'} The cited plan remains available above.</p>}
+
         <section className="source-shelf" aria-labelledby="source-plates-title">
           <div className="source-shelf-heading">
             <div><p className="section-kicker">02a · Verify</p><h3 id="source-plates-title">Supporting material</h3></div>
@@ -603,7 +609,7 @@ export default function Home() {
       <section className="catalog-section" aria-labelledby="catalog-title">
         <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title" tabIndex={-1}>The confirmed corpus</h2></div></div>
         <div className="catalog-grid">
-          {thermalSites.map((site) => <button type="button" key={site.id} aria-pressed={site.id === selected.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
+          {thermalSites.map((site) => <button type="button" key={site.id} aria-pressed={site.id === selected.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}{planModelForSite(site.id) && <span className="tile-model-badge"><Box size={13} /> 3D plan</span>}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
         </div>
         <div className="dubious-section">
           <div className="dubious-heading"><div><h3>Dubious sites</h3></div><p>These eleven localities comprise the dissertation’s <i>Dubious sites</i> section. They are shown as amber, dashed locality markers—not confirmed thermal sites—and remain separate from the confirmed-site dossiers.</p></div>
@@ -616,12 +622,12 @@ export default function Home() {
           <div>
             <p className="section-kicker">Method & scope</p>
             <h2 id="method-title">Evidence before atmosphere.</h2>
-            <p className="method-copy">This atlas follows the confirmed <i>Catalogue of Sites</i> in Avramova’s dissertation (digital pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have a plan or excavation plan reproduced in the dissertation; each is shown as a labelled source document. The atlas does not invent height, bath geometry or unrecorded dimensions.</p>
+            <p className="method-copy">This atlas follows the confirmed <i>Catalogue of Sites</i> in Avramova’s dissertation (digital pp. 199–249; printed pp. 195–245). Architecture, spring deposits, water data and citations are preserved as distinct evidence threads. Seven records have cited plans. Two also offer an experimental 3D plan relief: source-traced horizontal outlines, raised only to aid viewing. Ancient elevations and missing architecture are not reconstructed.</p>
             <button type="button" className="caveat-toggle" aria-expanded={showCaveats} onClick={() => setShowCaveats(!showCaveats)}><CircleAlert size={16} /> {showCaveats ? 'Hide' : 'Read'} scope & uncertainty notes</button>
             {showCaveats && <div className="caveat-box">
               <p><b>Included:</b> Sixteen confirmed entries from the dissertation’s <i>Catalogue of Sites</i> are presented as interactive site dossiers. Diocletianopolis remains one dossier, with its five Roman-used springs identified separately within that record.</p>
               <p><b>Visible but separate:</b> Eleven localities from the dissertation’s <i>Dubious sites</i> section appear as amber, dashed markers and in a separate catalogue. They are excluded from the confirmed total and do not receive confirmed-site dossiers.</p>
-              <p><b>Plans and images:</b> Cited plan material is available for Pautalia, Germania, Ulpia Serdica, Diocletianopolis, Starozagorski Bani, Mineralni Bani (Haskovo) and Aquae Calidae. Plans, archaeological plates and credited place photographs are shown as source evidence and can be enlarged; none is converted into a speculative three-dimensional reconstruction.</p>
+              <p><b>Plans and images:</b> Cited plan material is available for Pautalia, Germania, Ulpia Serdica, Diocletianopolis, Starozagorski Bani, Mineralni Bani (Haskovo) and Aquae Calidae. Plans, archaeological plates and credited place photographs can be enlarged. Only the reviewed footprints at Diocletianopolis (Momina salza, Fig. 37) and Starozagorski Bani (selected fabric, Fig. 24) have plan reliefs. Their uniform display height has no historical meaning. Other sites are omitted from 3D where boundaries, identification or phase separation could not be reproduced reliably.</p>
               <p><b>Map layers:</b> Site points use modern settlement or spring anchors. Present-day national borders come from Natural Earth; the Roman provincial overlay is GISGILDE’s AD 117 vectorization based on <i>Barrington Atlas</i> Map 100. The overlay is a dated geographic reference, not a boundary model for every record across AD 46–395.</p>
               <p><b>Editorial cautions:</b> Record-specific notes preserve uncertainty around coordinate precision, source provenance, later well measurements, incomplete excavation publication, duplicate numbering and conflicting numerical data instead of silently resolving it.</p>
             </div>}

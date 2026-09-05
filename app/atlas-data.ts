@@ -392,7 +392,7 @@ export const thermalSites: ThermalSite[] = [
     acidity: 'pH 8.52–10',
     mineral: '186–266 mg/L · low',
     waterNote: 'Five Roman-used springs are catalogued separately: Toplitsa, Momina salza, Svezhest, Rusalka and Momina banya.',
-    archaeology: 'Toplitsa has a 15-room fourth-century bath; Momina salza preserves a catchment, Late Antique bath and eastern thermal complex.',
+    archaeology: 'Toplitsa has the Late Antique bath excavated in 1935; Momina salza preserves a catchment and a separate thermal complex.',
     ritual: 'Nymph reliefs, coins, a medical instrument and organic deposits are recorded across the spring complex.',
     sourcePages: 'Dissertation pp. 230–238 · printed pp. 226–234',
     coordinateSource: { label: 'Hisarya Roman thermae record', url: 'https://commons.wikimedia.org/wiki/Category:Roman_Thermae_(Hisarya)' },
@@ -401,16 +401,16 @@ export const thermalSites: ThermalSite[] = [
     figure: 'Fig. 12 · photo by the dissertation author',
     plan: {
       image: '/archive-plates/diocletianopolis-late-antique-bath-plan.jpg',
-      caption: 'Plan of the Late Antique bath excavated by D. Tsonchev in 1935.',
+      caption: 'Plan of the Late Antique bath at Toplitsa, excavated by D. Tsonchev in 1935.',
       figure: 'Fig. 15 · after Tsonchev 1937',
       label: 'SITE PLAN',
-      note: 'This plate is the recorded Late Antique bath plan; it does not combine the five separately catalogued springs into one reconstructed layout.',
+      note: 'This is the Toplitsa bath (Fig. 15), distinct from the Momina salza thermal complex (Fig. 37) used for the 3D plan relief. The five separately catalogued springs are not combined.',
     },
     sourceFigures: [
       thesisThermalSitesMap,
       {
         image: '/archive-plates/diocletianopolis-thermal-complex-plan.jpg',
-        caption: 'Plan of the thermal complex.',
+        caption: 'Plan of the thermal complex at Momina salza.',
         figure: 'Fig. 37 · after Madzharov, Tancheva, Madzharov 2021a',
         label: 'THERMAL COMPLEX PLAN',
       },
