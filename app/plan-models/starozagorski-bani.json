@@ -5,14 +5,14 @@
   "imageHeight": 980,
   "crop": [
     65,
-    128,
-    690,
-    711
+    25,
+    785,
+    935
   ],
-  "title": "Thermae · selected recorded remains",
+  "title": "Thermae · the published plan",
   "figure": "Avramova 2024, Fig. 24 (digital p. 280 / printed p. 276), based on Nikolov 1968: 44, fig. 1",
-  "scope": "Only the solid black masonry and catchment column footprints in Fig. 24, plus the pool floors. Source numbers are retained. Hatched peripheral fabric, dashed channels, arches, and small loose details are excluded.",
-  "limitation": "A source-proportional plan relief. Raised shapes and colour are display conventions, not ancient wall height, surviving height, depth, water level, or a shared floor level. Catchment 6 was underground. No roofs, arches, missing walls, or phase chronology are reconstructed. Black ink has no explicit phase key in this figure. Raster boundary uncertainty is approximately ±3 pixels; very small irregularities are simplified.",
+  "scope": "The recorded architecture of Fig. 24: solid-black masonry, clearly bounded hatched fabric around spaces 9–14 and the northern enclosure, the catchment’s square footprints, the three basin floors and readable stepped edges. Black and hatched conventions remain visually distinct without assigning construction phases. Source numbers are retained; broken-line water installations, arches and labels stay in the flat source plate.",
+  "limitation": "A source-proportional plan relief. Raised shapes and colour are display conventions, not ancient wall height, surviving height, depth, water level or a shared floor level. Catchment 6 was underground. No roofs, arches, missing walls or phase chronology are reconstructed. Black ink has no explicit phase key in this figure. Copper ribbon width is a display convention, not wall thickness; these lines reproduce basin-edge drafting, not measured stair risers. The prose and the drawing describe the stepped sides differently, so no 3D step count or height is inferred. Raster boundary uncertainty is approximately ±3 pixels.",
   "features": [
     {
       "id": "black-masonry",
@@ -2417,456 +2417,678 @@
     {
       "id": "catchment-6-columns",
       "label": "Catchment 6 · column footprints",
-      "note": "Avramova digital p. 62 / printed p. 58 identifies 6 as an underground catchment with brick columns supporting multiple arches. Only the square column footprints are traced; the arches and vertical relationship to the baths are not reconstructed.",
+      "note": "Printed p. 58 identifies 6 as an underground catchment with brick columns supporting arches. The detached marks follow their recorded size and rotation. Where a mark touches the circled number 6, only the square footprint is retained. Attached perimeter projections remain in the solid-black masonry feature. No arch or vertical relationship is reconstructed.",
       "kind": "detail",
       "polygons": [
         {
           "outline": [
             [
-              638,
+              633,
+              258
+            ],
+            [
+              634,
+              257
+            ],
+            [
+              637,
               255
             ],
             [
-              646,
-              256
-            ],
-            [
-              648,
-              260
-            ],
-            [
-              647,
-              268
-            ],
-            [
-              639,
-              268
-            ],
-            [
-              636,
-              266
-            ],
-            [
-              636,
-              256
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              612,
-              270
-            ],
-            [
-              620,
-              270
-            ],
-            [
-              623,
-              274
-            ],
-            [
-              623,
-              281
-            ],
-            [
-              612,
-              282
-            ],
-            [
-              610,
-              279
-            ],
-            [
-              610,
-              272
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              629,
-              295
-            ],
-            [
-              636,
-              295
-            ],
-            [
-              639,
-              297
-            ],
-            [
-              639,
-              305
-            ],
-            [
-              636,
-              307
-            ],
-            [
-              628,
-              307
-            ],
-            [
-              627,
-              298
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              597,
-              244
-            ],
-            [
-              604,
-              244
-            ],
-            [
-              606,
-              247
-            ],
-            [
-              606,
-              254
-            ],
-            [
-              603,
-              256
-            ],
-            [
-              596,
-              256
-            ],
-            [
-              594,
-              254
-            ],
-            [
-              594,
-              246
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              663,
-              240
-            ],
-            [
-              671,
-              240
-            ],
-            [
-              673,
-              251
-            ],
-            [
-              663,
-              251
-            ],
-            [
-              661,
-              248
-            ],
-            [
-              661,
-              241
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              705,
-              251
-            ],
-            [
-              714,
+              642,
               252
             ],
             [
-              714,
-              261
+              643,
+              252
             ],
             [
-              704,
-              262
+              646,
+              255
             ],
             [
-              702,
+              649,
               260
             ],
             [
-              702,
-              253
+              650,
+              262
+            ],
+            [
+              650,
+              271
+            ],
+            [
+              649,
+              271
+            ],
+            [
+              640,
+              270
+            ],
+            [
+              635,
+              266
+            ],
+            [
+              633,
+              259
             ]
-          ],
-          "holes": []
+          ]
         },
         {
           "outline": [
             [
-              589,
-              284
+              659,
+              242
             ],
             [
-              597,
-              284
+              660,
+              241
             ],
             [
-              599,
+              665,
+              238
+            ],
+            [
+              667,
+              237
+            ],
+            [
+              668,
+              237
+            ],
+            [
+              670,
+              238
+            ],
+            [
+              673,
+              243
+            ],
+            [
+              675,
+              247
+            ],
+            [
+              675,
+              250
+            ],
+            [
+              674,
+              251
+            ],
+            [
+              669,
+              254
+            ],
+            [
+              667,
+              255
+            ],
+            [
+              665,
+              255
+            ],
+            [
+              664,
+              254
+            ],
+            [
+              660,
+              248
+            ],
+            [
+              659,
+              246
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              585,
               287
             ],
             [
-              598,
-              296
+              587,
+              285
             ],
             [
-              590,
-              296
+              593,
+              281
+            ],
+            [
+              595,
+              281
+            ],
+            [
+              597,
+              283
+            ],
+            [
+              600,
+              288
+            ],
+            [
+              602,
+              292
+            ],
+            [
+              602,
+              293
+            ],
+            [
+              600,
+              295
+            ],
+            [
+              597,
+              297
+            ],
+            [
+              593,
+              299
+            ],
+            [
+              591,
+              299
             ],
             [
               588,
-              294
+              295
+            ],
+            [
+              585,
+              289
             ]
-          ],
-          "holes": []
+          ]
         },
         {
           "outline": [
             [
-              647,
-              213
+              591,
+              247
             ],
             [
-              654,
-              213
+              596,
+              244
             ],
             [
-              656,
+              600,
+              242
+            ],
+            [
+              602,
+              242
+            ],
+            [
+              606,
+              246
+            ],
+            [
+              608,
+              250
+            ],
+            [
+              608,
+              253
+            ],
+            [
+              607,
+              254
+            ],
+            [
+              600,
+              258
+            ],
+            [
+              597,
+              258
+            ],
+            [
+              596,
+              257
+            ],
+            [
+              592,
+              252
+            ],
+            [
+              591,
+              250
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              642,
               216
             ],
             [
-              656,
+              645,
+              214
+            ],
+            [
+              650,
+              211
+            ],
+            [
+              652,
+              210
+            ],
+            [
+              653,
+              210
+            ],
+            [
+              657,
+              217
+            ],
+            [
+              658,
+              219
+            ],
+            [
+              658,
+              222
+            ],
+            [
+              657,
               223
             ],
             [
-              654,
+              653,
+              226
+            ],
+            [
+              651,
+              227
+            ],
+            [
+              648,
+              227
+            ],
+            [
+              646,
               225
             ],
             [
-              647,
-              225
+              643,
+              220
             ],
             [
-              645,
-              223
-            ],
-            [
-              645,
-              215
+              642,
+              218
             ]
-          ],
-          "holes": []
+          ]
+        },
+        {
+          "outline": [
+            [
+              617,
+              232
+            ],
+            [
+              619,
+              230
+            ],
+            [
+              625,
+              226
+            ],
+            [
+              626,
+              226
+            ],
+            [
+              628,
+              227
+            ],
+            [
+              630,
+              229
+            ],
+            [
+              634,
+              235
+            ],
+            [
+              634,
+              237
+            ],
+            [
+              633,
+              238
+            ],
+            [
+              626,
+              242
+            ],
+            [
+              624,
+              243
+            ],
+            [
+              623,
+              243
+            ],
+            [
+              621,
+              241
+            ],
+            [
+              617,
+              234
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              674,
+              268
+            ],
+            [
+              679,
+              265
+            ],
+            [
+              681,
+              264
+            ],
+            [
+              685,
+              264
+            ],
+            [
+              686,
+              265
+            ],
+            [
+              688,
+              268
+            ],
+            [
+              690,
+              272
+            ],
+            [
+              690,
+              275
+            ],
+            [
+              684,
+              279
+            ],
+            [
+              682,
+              280
+            ],
+            [
+              680,
+              280
+            ],
+            [
+              677,
+              276
+            ],
+            [
+              674,
+              270
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              665,
+              309
+            ],
+            [
+              667,
+              307
+            ],
+            [
+              673,
+              304
+            ],
+            [
+              676,
+              304
+            ],
+            [
+              677,
+              305
+            ],
+            [
+              679,
+              308
+            ],
+            [
+              680,
+              311
+            ],
+            [
+              680,
+              313
+            ],
+            [
+              677,
+              316
+            ],
+            [
+              671,
+              319
+            ],
+            [
+              670,
+              319
+            ],
+            [
+              669,
+              318
+            ],
+            [
+              665,
+              310
+            ]
+          ]
         },
         {
           "outline": [
             [
               690,
-              225
+              294
             ],
             [
-              698,
-              226
+              691,
+              293
             ],
             [
-              698,
-              236
+              699,
+              289
             ],
             [
-              688,
-              236
-            ],
-            [
-              688,
-              226
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              679,
-              266
-            ],
-            [
-              687,
-              267
-            ],
-            [
-              688,
-              276
-            ],
-            [
-              679,
-              277
-            ],
-            [
-              677,
-              275
-            ],
-            [
-              677,
-              267
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              622,
-              229
-            ],
-            [
-              630,
-              230
-            ],
-            [
-              631,
-              239
-            ],
-            [
-              621,
-              240
-            ],
-            [
-              620,
-              230
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              652,
-              281
-            ],
-            [
-              661,
-              281
-            ],
-            [
-              662,
-              291
-            ],
-            [
-              653,
-              291
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              670,
-              306
-            ],
-            [
-              678,
-              307
-            ],
-            [
-              678,
-              314
-            ],
-            [
-              676,
-              316
-            ],
-            [
-              668,
-              315
-            ],
-            [
-              668,
-              307
-            ]
-          ],
-          "holes": []
-        },
-        {
-          "outline": [
-            [
-              695,
-              292
+              700,
+              289
             ],
             [
               702,
-              292
+              291
             ],
             [
-              701,
+              705,
+              296
+            ],
+            [
+              705,
+              299
+            ],
+            [
+              702,
               301
             ],
             [
-              693,
+              698,
+              303
+            ],
+            [
+              695,
+              303
+            ],
+            [
+              692,
               300
             ],
             [
-              693,
-              293
+              690,
+              297
             ]
-          ],
-          "holes": []
+          ]
+        },
+        {
+          "outline": [
+            [
+              607,
+              273
+            ],
+            [
+              619,
+              267
+            ],
+            [
+              625,
+              279
+            ],
+            [
+              613,
+              286
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              624,
+              298
+            ],
+            [
+              636,
+              291
+            ],
+            [
+              641,
+              303
+            ],
+            [
+              629,
+              309
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              648,
+              282
+            ],
+            [
+              659,
+              276
+            ],
+            [
+              665,
+              288
+            ],
+            [
+              653,
+              294
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              699,
+              252
+            ],
+            [
+              711,
+              246
+            ],
+            [
+              718,
+              258
+            ],
+            [
+              706,
+              265
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              683,
+              227
+            ],
+            [
+              695,
+              220
+            ],
+            [
+              702,
+              233
+            ],
+            [
+              690,
+              240
+            ]
+          ]
         }
       ]
     },
     {
       "id": "pool-1",
       "label": "Pool 1",
-      "note": "Footprint traced inside the drawn steps; flat coloured surface identifies the basin and does not represent a reconstructed water level or depth.",
+      "note": "Inner floor area read directly against the innermost drawn basin boundary. The colour identifies the basin floor footprint, not water, a reconstructed depth, or a common elevation. Edge irregularities and the open northern interruption of pool 1 are preserved where legible.",
       "kind": "basin",
       "polygons": [
         {
           "outline": [
             [
-              360,
-              346
-            ],
-            [
-              399,
-              356
-            ],
-            [
-              402,
+              354,
               347
             ],
             [
+              399,
+              357
+            ],
+            [
+              402,
+              349
+            ],
+            [
+              411,
+              352
+            ],
+            [
+              410,
+              359
+            ],
+            [
               458,
-              363
+              371
             ],
             [
               416,
-              523
+              526
             ],
             [
-              317,
-              503
+              316,
+              502
             ]
           ]
         }
@@ -2875,7 +3097,7 @@
     {
       "id": "pool-2",
       "label": "Pool 2",
-      "note": "Footprint traced inside the drawn steps; flat coloured surface identifies the basin and does not represent a reconstructed water level or depth.",
+      "note": "Inner floor area read directly against the innermost drawn basin boundary. The colour identifies the floor, not water, a reconstructed depth or a common elevation.",
       "kind": "basin",
       "polygons": [
         {
@@ -2885,16 +3107,16 @@
               408
             ],
             [
-              656,
+              655,
               432
             ],
             [
-              581,
-              696
+              585,
+              702
             ],
             [
-              480,
-              675
+              477,
+              674
             ]
           ]
         }
@@ -2903,31 +3125,1163 @@
     {
       "id": "pool-5",
       "label": "Pool 5",
-      "note": "Footprint traced inside the drawn steps; flat coloured surface identifies the basin and does not represent a reconstructed water level or depth.",
+      "note": "Inner floor area read directly against the innermost drawn basin boundary. The colour identifies the floor, not water, a reconstructed depth or a common elevation.",
       "kind": "basin",
       "polygons": [
         {
           "outline": [
             [
-              293,
-              732
+              292,
+              726
             ],
             [
-              336,
+              341,
+              739
+            ],
+            [
+              325,
+              801
+            ],
+            [
+              276,
+              790
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "isolated-square-mark",
+      "label": "Square mark inside the semicircular feature",
+      "kind": "detail",
+      "note": "The separate rotated black square inside the small semicircular feature adjoining catchment 6 is copied from Fig. 24 without assigning it a new function or a height.",
+      "polygons": [
+        {
+          "outline": [
+            [
+              617,
+              338
+            ],
+            [
+              619,
+              336
+            ],
+            [
+              622,
+              334
+            ],
+            [
+              624,
+              333
+            ],
+            [
+              628,
+              333
+            ],
+            [
+              629,
+              334
+            ],
+            [
+              632,
+              338
+            ],
+            [
+              633,
+              341
+            ],
+            [
+              633,
+              342
+            ],
+            [
+              630,
+              345
+            ],
+            [
+              625,
+              348
+            ],
+            [
+              622,
+              348
+            ],
+            [
+              620,
+              346
+            ],
+            [
+              618,
+              343
+            ],
+            [
+              617,
+              341
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "basin-edge-linework",
+      "label": "Basin edges and step lines",
+      "kind": "outline",
+      "note": "Thin 1.5-pixel display ribbons copy the readable basin contours in Fig. 24. They preserve the northern interruption at pool 1 and distinguish floor area from the surrounding bands. Printed p. 81 gives step counts whose long/short-side wording appears reversed relative to this plate, so these source lines are not converted into measured risers or assigned a stair count.",
+      "polygons": [
+        {
+          "outline": [
+            [
+              349.799,
+              322.723
+            ],
+            [
+              403.799,
+              337.723
+            ],
+            [
+              404.201,
+              336.277
+            ],
+            [
+              350.201,
+              321.277
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              347.806,
+              327.724
+            ],
+            [
+              403.806,
+              342.724
+            ],
+            [
+              404.194,
+              341.276
+            ],
+            [
+              348.194,
+              326.276
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              346.821,
+              333.728
+            ],
+            [
+              403.821,
+              347.728
+            ],
+            [
+              404.179,
+              346.272
+            ],
+            [
+              347.179,
+              332.272
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              345.808,
+              339.725
+            ],
+            [
+              398.808,
+              353.725
+            ],
+            [
+              399.192,
+              352.275
+            ],
+            [
+              346.192,
+              338.275
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              417.815,
+              338.727
+            ],
+            [
+              472.815,
+              352.727
+            ],
+            [
+              473.185,
+              351.273
+            ],
+            [
+              418.185,
+              337.273
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              416.805,
+              344.724
+            ],
+            [
+              468.805,
+              358.724
+            ],
+            [
+              469.195,
+              357.276
+            ],
+            [
+              417.195,
+              343.276
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              415.801,
+              350.723
+            ],
+            [
+              466.801,
+              364.723
+            ],
+            [
+              467.199,
+              363.277
+            ],
+            [
+              416.199,
+              349.277
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              414.798,
+              356.722
+            ],
+            [
+              464.798,
+              370.722
+            ],
+            [
+              465.202,
+              369.278
+            ],
+            [
+              415.202,
+              355.278
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              349.27,
+              321.827
+            ],
+            [
+              301.27,
+              524.827
+            ],
+            [
+              302.73,
+              525.173
+            ],
+            [
+              350.73,
+              322.173
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              353.272,
+              346.821
+            ],
+            [
+              315.272,
+              501.821
+            ],
+            [
+              316.728,
+              502.179
+            ],
+            [
+              354.728,
+              347.179
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              472.275,
+              351.809
+            ],
+            [
+              418.275,
+              556.809
+            ],
+            [
+              419.725,
+              557.191
+            ],
+            [
+              473.725,
+              352.191
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              457.276,
+              370.804
+            ],
+            [
+              415.276,
+              525.804
+            ],
+            [
+              416.724,
+              526.196
+            ],
+            [
+              458.724,
+              371.196
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              306.824,
+              508.729
+            ],
+            [
+              418.824,
+              535.729
+            ],
+            [
+              419.176,
+              534.271
+            ],
+            [
+              307.176,
+              507.271
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              304.826,
+              514.729
+            ],
+            [
+              417.826,
+              541.729
+            ],
+            [
+              418.174,
+              540.271
+            ],
+            [
+              305.174,
+              513.271
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              302.827,
+              520.73
+            ],
+            [
+              416.827,
+              547.73
+            ],
+            [
+              417.173,
+              546.27
+            ],
+            [
+              303.173,
+              519.27
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              301.821,
+              525.728
+            ],
+            [
+              415.821,
+              553.728
+            ],
+            [
+              416.179,
+              552.272
+            ],
+            [
+              302.179,
+              524.272
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              541.823,
+              382.729
+            ],
+            [
+              673.823,
+              414.729
+            ],
+            [
+              674.177,
+              413.271
+            ],
+            [
+              542.177,
+              381.271
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              673.275,
+              413.808
+            ],
+            [
+              590.275,
+              727.808
+            ],
+            [
+              591.725,
+              728.192
+            ],
+            [
+              674.725,
+              414.192
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              591.182,
+              727.272
+            ],
+            [
+              463.182,
+              695.272
+            ],
+            [
+              462.818,
+              696.728
+            ],
+            [
+              590.818,
+              728.728
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              463.727,
+              696.183
+            ],
+            [
+              542.727,
+              382.183
+            ],
+            [
+              541.273,
+              381.817
+            ],
+            [
+              462.273,
+              695.817
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              545.822,
+              389.729
+            ],
+            [
+              668.822,
+              419.729
+            ],
+            [
+              669.178,
+              418.271
+            ],
+            [
+              546.178,
+              388.271
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              668.276,
+              418.805
+            ],
+            [
+              587.276,
+              719.805
+            ],
+            [
+              588.724,
+              720.195
+            ],
+            [
+              669.724,
+              419.195
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              588.197,
+              719.276
+            ],
+            [
+              467.197,
+              686.276
+            ],
+            [
+              466.803,
+              687.724
+            ],
+            [
+              587.803,
+              720.724
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              467.725,
+              687.192
+            ],
+            [
+              546.725,
+              389.192
+            ],
+            [
+              545.275,
+              388.808
+            ],
+            [
+              466.275,
+              686.808
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              549.826,
+              398.729
+            ],
+            [
+              662.826,
+              425.729
+            ],
+            [
+              663.174,
+              424.271
+            ],
+            [
+              550.174,
+              397.271
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              662.275,
+              424.809
+            ],
+            [
+              587.275,
+              709.809
+            ],
+            [
+              588.725,
+              710.191
+            ],
+            [
+              663.725,
+              425.191
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              588.185,
+              709.273
+            ],
+            [
+              470.185,
+              679.273
+            ],
+            [
+              469.815,
+              680.727
+            ],
+            [
+              587.815,
+              710.727
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              470.722,
+              680.205
+            ],
+            [
+              550.722,
+              398.205
+            ],
+            [
+              549.278,
+              397.795
+            ],
+            [
+              469.278,
+              679.795
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              554.818,
+              407.728
+            ],
+            [
+              654.818,
+              432.728
+            ],
+            [
+              655.182,
+              431.272
+            ],
+            [
+              555.182,
+              406.272
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              654.274,
+              431.812
+            ],
+            [
+              584.274,
+              701.812
+            ],
+            [
+              585.726,
+              702.188
+            ],
+            [
+              655.726,
+              432.188
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              585.188,
+              701.274
+            ],
+            [
+              477.188,
+              673.274
+            ],
+            [
+              476.812,
+              674.726
+            ],
+            [
+              584.812,
+              702.726
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              477.72,
+              674.21
+            ],
+            [
+              555.72,
+              407.21
+            ],
+            [
+              554.28,
+              406.79
+            ],
+            [
+              476.28,
+              673.79
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              289.812,
+              723.726
+            ],
+            [
+              343.812,
+              737.726
+            ],
+            [
+              344.188,
+              736.274
+            ],
+            [
+              290.188,
+              722.274
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              343.276,
+              736.805
+            ],
+            [
+              325.276,
+              803.805
+            ],
+            [
+              326.724,
+              804.195
+            ],
+            [
+              344.724,
+              737.195
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              326.179,
+              803.272
+            ],
+            [
+              273.179,
+              790.272
+            ],
+            [
+              272.821,
+              791.728
+            ],
+            [
+              325.821,
+              804.728
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              273.728,
+              791.182
+            ],
+            [
+              290.728,
+              723.182
+            ],
+            [
+              289.272,
+              722.818
+            ],
+            [
+              272.272,
+              790.818
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bounded-hatched-fabric",
+      "label": "Enclosure & spaces 9–14",
+      "kind": "hatched",
+      "note": "Both edges are legible in these hatched bands: the northern enclosure, space 9 and the southern connection, and the eastern range of numbered spaces 10–14. Open approaches, the interruption beside 13, interior voids and the rounded southern end of 13 are preserved. This is a distinct graphic convention in Fig. 24; no phase, construction material or wall height is assigned.",
+      "polygons": [
+        {
+          "outline": [
+            [
+              178,
+              231
+            ],
+            [
+              227,
+              36
+            ],
+            [
+              785,
+              177
+            ],
+            [
+              738,
+              376
+            ],
+            [
+              722,
+              372
+            ],
+            [
+              767,
+              188
+            ],
+            [
+              240,
+              56
+            ],
+            [
+              194,
+              235
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              418,
+              749
+            ],
+            [
+              640,
+              798
+            ],
+            [
+              625,
+              817
+            ],
+            [
+              431,
+              770
+            ],
+            [
+              413,
+              849
+            ],
+            [
+              342,
+              834
+            ],
+            [
+              346,
+              818
+            ],
+            [
+              399,
+              830
+            ],
+            [
+              415,
+              766
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              440,
+              733
+            ],
+            [
+              463,
+              739
+            ],
+            [
+              459,
+              756
+            ],
+            [
+              436,
+              750
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              652,
+              719
+            ],
+            [
+              737,
+              376
+            ],
+            [
+              840,
+              397
+            ],
+            [
+              704,
+              933
+            ],
+            [
+              619,
+              914
+            ],
+            [
+              636,
+              850
+            ],
+            [
+              625,
+              817
+            ],
+            [
+              641,
+              740
+            ],
+            [
+              652,
+              744
+            ],
+            [
+              659,
+              747
+            ],
+            [
+              657,
+              758
+            ],
+            [
+              650,
+              756
+            ],
+            [
+              644,
+              790
+            ],
+            [
+              655,
+              792
+            ],
+            [
+              653,
+              803
+            ],
+            [
+              643,
+              801
+            ],
+            [
+              642,
+              816
+            ],
+            [
+              646,
+              829
+            ],
+            [
+              653,
+              839
+            ],
+            [
+              663,
+              847
+            ],
+            [
+              676,
+              852
+            ],
+            [
+              689,
+              852
+            ],
+            [
+              702,
+              847
+            ],
+            [
+              713,
+              839
+            ],
+            [
+              721,
+              828
+            ],
+            [
+              725,
+              818
+            ],
+            [
+              714,
+              816
+            ],
+            [
+              716,
+              806
+            ],
+            [
+              725,
+              807
+            ],
+            [
+              741,
               745
             ],
             [
-              322,
-              795
+              734,
+              742
             ],
             [
-              279,
-              783
+              736,
+              732
+            ],
+            [
+              659,
+              724
+            ]
+          ],
+          "holes": [
+            [
+              [
+                749,
+                397
+              ],
+              [
+                816,
+                414
+              ],
+              [
+                791,
+                513
+              ],
+              [
+                722,
+                496
+              ]
+            ],
+            [
+              [
+                718,
+                512
+              ],
+              [
+                786,
+                528
+              ],
+              [
+                763,
+                617
+              ],
+              [
+                693,
+                603
+              ]
+            ],
+            [
+              [
+                690,
+                621
+              ],
+              [
+                761,
+                635
+              ],
+              [
+                737,
+                718
+              ],
+              [
+                669,
+                701
+              ]
+            ],
+            [
+              [
+                650,
+                857
+              ],
+              [
+                664,
+                862
+              ],
+              [
+                679,
+                865
+              ],
+              [
+                696,
+                865
+              ],
+              [
+                684,
+                913
+              ],
+              [
+                637,
+                899
+              ]
             ]
           ]
         }
       ]
     }
   ],
-  "sourceSha256": "381bfb1a3b6334a72e3f32bd18eaeb8560ad24f691f846a80f0f02c514b9bd8c"
+  "sourceSha256": "381bfb1a3b6334a72e3f32bd18eaeb8560ad24f691f846a80f0f02c514b9bd8c",
+  "independentReview": {
+    "sources": [
+      "Original archive plate",
+      "Complete dissertation digital p. 280 / printed p. 276",
+      "Catchment description digital p. 62 / printed p. 58",
+      "Pool dimensions digital p. 82 / printed p. 78",
+      "Step discussion digital p. 85 / printed p. 81"
+    ],
+    "method": "Independently compared complete plate, original raster, enlarged contours and source descriptions. Rotated footprints and basin corners were checked visually, not inferred from existing JSON. Photographs were reviewed for relevance, not used to invent elevations."
+  }
 }

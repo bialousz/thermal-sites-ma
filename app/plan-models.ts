@@ -6,7 +6,7 @@ import type { PlanModel } from './plan-model-types';
 
 // Deliberate allowlist: a plan image or evidence confidence NEVER enables 3D.
 // JSON widens pixel tuples to arrays; source dimensions and all rings are checked in plan-models.test.mjs.
-const models: PlanModel[] = [diocletianopolis as PlanModel, starozagorski as PlanModel, haskovo as PlanModel, pautalia as unknown as PlanModel];
+const models = [diocletianopolis, starozagorski, haskovo, pautalia] as unknown as PlanModel[];
 export function planModelForSite(siteId: string): PlanModel | undefined {
   return models.find((model) => model.siteId === siteId);
 }

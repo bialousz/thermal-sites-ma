@@ -1,0 +1,253 @@
+{
+  "diocletianopolis": [
+    {
+      "point": [
+        308.5,
+        384.5
+      ],
+      "featureId": "thermal-complex-masonry",
+      "inside": false,
+      "reason": "Enclosed white aperture mark in the solid-black projection at the northwest side of the caldarium 2 / tepidarium 1 junction; Fig. 37. Formerly filled by the under-9-pixel hole rule."
+    },
+    {
+      "point": [
+        181,
+        452
+      ],
+      "featureId": "thermal-complex-masonry",
+      "inside": false,
+      "reason": "Thin ink spur below the continuous southwest face of the black block, inside the western excavation hatch; Fig. 37. This is not a defensible solid masonry footprint."
+    },
+    {
+      "point": [
+        243.5,
+        532.5
+      ],
+      "featureId": "thermal-complex-masonry",
+      "inside": false,
+      "reason": "Patterned rubble/stone drawing on the short southwest arm; Fig. 37. It must not become solid-black masonry through threshold bleed."
+    },
+    {
+      "point": [
+        303,
+        168
+      ],
+      "featureId": "thermal-complex-masonry",
+      "inside": true,
+      "reason": "Broad, unequivocal solid-black northwest wall of source caldarium 1a, well away from a door or white aperture; Fig. 37."
+    }
+  ],
+  "pautalia": [
+    {
+      "point": [
+        422.8,
+        591.2
+      ],
+      "featureId": "rooms-3-4-supports",
+      "inside": true,
+      "reason": "Fig. 50 shows a closed square support symbol directly beneath the return of the room-3 west partition; omitted before review. Printed p. 91 corroborates wall-adjacent pilae."
+    },
+    {
+      "point": [
+        464.8,
+        732.5
+      ],
+      "featureId": "rooms-3-4-supports",
+      "inside": true,
+      "reason": "The western of three individually drawn support symbols attached to the southern boundary of room 3; the source contains all three, rather than an extrapolated row."
+    },
+    {
+      "point": [
+        355.0,
+        679.0
+      ],
+      "featureId": "rooms-3-4-supports",
+      "inside": true,
+      "reason": "A legible square support symbol protrudes left of the short southern internal return in room 4. Its footprint was missing while the adjoining linework was already present."
+    },
+    {
+      "point": [
+        73.2,
+        138.7
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "This point lies on the western semicircle labelled a in the northern strip. The supplied material does not establish that these profiles are horizontal footprints; all three remain visible only in the flat source."
+    }
+  ],
+  "starozagorski-bani": [
+    {
+      "point": [
+        625,
+        340
+      ],
+      "featureId": "isolated-square-mark",
+      "inside": true,
+      "reason": "Centre of the separate black rotated square inside the small semicircular feature adjoining catchment 6; the former model omitted this visible mark."
+    },
+    {
+      "point": [
+        315,
+        735
+      ],
+      "featureId": "pool-5",
+      "inside": true,
+      "reason": "Inside the upper part of pool 5’s innermost floor boundary. The former deliberately inset fill excluded this source-recorded floor area."
+    },
+    {
+      "point": [
+        637,
+        281
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Printed numeral 6 inside its circle is annotation, not another column or masonry footprint."
+    },
+    {
+      "point": [
+        468,
+        475
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "The break through the central fabric between the two large pools contains broken-line water-installation marks. It is not to be filled into a solid wall."
+    },
+    {
+      "point": [
+        817,
+        450
+      ],
+      "featureId": "bounded-hatched-fabric",
+      "inside": true,
+      "reason": "Middle of the clearly bounded eastern hatched wall of space 10; this documented range was absent from the earlier model."
+    },
+    {
+      "point": [
+        745,
+        570
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "The open interior of numbered space 11 must remain a void inside the newly traced eastern range."
+    },
+    {
+      "point": [
+        677,
+        839
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Interior of the rounded southern end of space 13, protected from being filled by a rectangular approximation."
+    },
+    {
+      "point": [
+        406,
+        830
+      ],
+      "featureId": "bounded-hatched-fabric",
+      "inside": true,
+      "reason": "The clearly bounded eastern wall of space 9; the space’s northern approach must remain open."
+    },
+    {
+      "point": [
+        500,
+        114
+      ],
+      "featureId": "bounded-hatched-fabric",
+      "inside": true,
+      "reason": "Middle of the long northern enclosure band, between its two recorded diagonal edges."
+    },
+    {
+      "point": [
+        382,
+        797
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 9 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    },
+    {
+      "point": [
+        770,
+        455
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 10 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    },
+    {
+      "point": [
+        738,
+        572
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 11 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    },
+    {
+      "point": [
+        710,
+        670
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 12 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    },
+    {
+      "point": [
+        686,
+        786
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 13 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    },
+    {
+      "point": [
+        665,
+        883
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Fig. 24: the clear numbered interior of space 14 must remain a void when its surrounding hatched walls are added. The number itself is annotation, not raised fabric."
+    }
+  ],
+  "haskovski-mineralni-bani": [
+    {
+      "point": [
+        200,
+        550
+      ],
+      "featureId": "pool-a",
+      "inside": true,
+      "reason": "Clear interior floor of basin а, below the corner steps and east of the recorded western inset."
+    },
+    {
+      "point": [
+        460,
+        550
+      ],
+      "featureId": "pool-b",
+      "inside": true,
+      "reason": "Clear interior floor of basin б, below the recorded corner steps."
+    },
+    {
+      "point": [
+        345,
+        550
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "The hatched narrow central strip is bounded by source outlines but its interior must not be inflated into conjectural solid masonry."
+    },
+    {
+      "point": [
+        365,
+        320
+      ],
+      "featureId": null,
+      "inside": false,
+      "reason": "Broken-line water-installation crossing in the open northern area. It is neither a solid wall nor a bathing floor."
+    }
+  ]
+}

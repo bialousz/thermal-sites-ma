@@ -11,13 +11,13 @@
   ],
   "title": "Momina salza · the thermal complex",
   "figure": "Fig. 37 · after Madzharov, Tancheva, Madzharov 2021a: 705, fig. 1 · Avramova 2024, digital p. 289 / printed p. 285",
-  "scope": "The five named rooms and their adjoining southern masonry in the published thermal-complex plan. Caldaria 1a, 1 and 2 and tepidaria 1 and 2 retain the positions shown in the source. The separate Toplitsa bath (Fig. 15) and the other springs are not combined with this footprint.",
-  "limitation": "A low relief of the solid-black plan convention, not an elevation or an ancient appearance. Display height is constant and carries no archaeological measurement. Floor textures, thin drainage and pavement lines, ambiguous dark marks, the western excavation hatch and the disconnected southern extension are kept in the source plate but not raised. No roofs, columns, water levels or original wall heights are inferred.",
+  "scope": "The solid-black masonry around the five rooms labelled in Fig. 37 and their adjoining southern junctions. Source names (caldaria 1a, 1, 2; tepidaria 1, 2) are retained as published labels, not settled functional interpretations. The separate Toplitsa bath (Fig. 15) and the other springs are not combined with this footprint.",
+  "limitation": "A relief of the published plan, not an elevation or a single historical phase. Uniform display height is not archaeological height. Small white aperture marks are retained as source symbols, without assigning channel routes, depth, or function. Floor textures, drainage/pavement lines, patterned rubble, western excavation hatching, ambiguous detached marks, and the southern continuation are visible in the source but not raised. No roof, arch, column, water level, or missing fabric is reconstructed.",
   "features": [
     {
       "id": "thermal-complex-masonry",
       "label": "Recorded masonry",
-      "note": "Traced from the solid-black wall convention in Fig. 37. The boundary follows the archival pixels, simplified within 0.8 image pixel; small raster holes under 9 square pixels are omitted. Compare directly with the source plate.",
+      "note": "Solid-black masonry boundaries and enclosed white marks follow Fig. 37. Patterned fabric and detached drawing marks remain in the source layer. Allow approximately ±2 pixels for interpreting and sampling this raster, not as survey or real-world dimensional accuracy. White marks are preserved without a reconstructed vertical profile.",
       "kind": "masonry",
       "polygons": [
         {
@@ -323,140 +323,12 @@
               540
             ],
             [
-              257,
-              543
-            ],
-            [
-              255,
-              543
-            ],
-            [
-              255,
-              542
-            ],
-            [
-              251,
+              253,
               541
             ],
             [
-              250,
-              539
-            ],
-            [
-              245,
+              252,
               538
-            ],
-            [
-              247,
-              536
-            ],
-            [
-              242,
-              536
-            ],
-            [
-              240,
-              533
-            ],
-            [
-              236,
-              533
-            ],
-            [
-              235,
-              530
-            ],
-            [
-              232,
-              531
-            ],
-            [
-              231,
-              529
-            ],
-            [
-              233,
-              529
-            ],
-            [
-              233,
-              528
-            ],
-            [
-              232,
-              527
-            ],
-            [
-              228,
-              528
-            ],
-            [
-              228,
-              526
-            ],
-            [
-              231,
-              526
-            ],
-            [
-              230,
-              523
-            ],
-            [
-              231,
-              524
-            ],
-            [
-              234,
-              523
-            ],
-            [
-              235,
-              524
-            ],
-            [
-              234,
-              528
-            ],
-            [
-              235,
-              529
-            ],
-            [
-              236,
-              528
-            ],
-            [
-              238,
-              528
-            ],
-            [
-              238,
-              529
-            ],
-            [
-              241,
-              528
-            ],
-            [
-              241,
-              529
-            ],
-            [
-              245,
-              530
-            ],
-            [
-              246,
-              532
-            ],
-            [
-              248,
-              532
-            ],
-            [
-              251,
-              535
             ],
             [
               254,
@@ -2966,6 +2838,162 @@
               288,
               513
             ]
+          ],
+          "holes": [
+            [
+              [
+                438,
+                330
+              ],
+              [
+                437,
+                330
+              ],
+              [
+                437,
+                331
+              ],
+              [
+                438,
+                331
+              ],
+              [
+                438,
+                332
+              ],
+              [
+                439,
+                332
+              ],
+              [
+                439,
+                331
+              ],
+              [
+                440,
+                331
+              ],
+              [
+                440,
+                330
+              ],
+              [
+                439,
+                330
+              ],
+              [
+                439,
+                329
+              ],
+              [
+                438,
+                329
+              ]
+            ],
+            [
+              [
+                347,
+                405
+              ],
+              [
+                346,
+                405
+              ],
+              [
+                346,
+                406
+              ],
+              [
+                349,
+                406
+              ],
+              [
+                349,
+                404
+              ],
+              [
+                347,
+                404
+              ]
+            ],
+            [
+              [
+                409,
+                443
+              ],
+              [
+                408,
+                443
+              ],
+              [
+                408,
+                445
+              ],
+              [
+                410,
+                445
+              ],
+              [
+                410,
+                442
+              ],
+              [
+                409,
+                442
+              ]
+            ],
+            [
+              [
+                287,
+                500
+              ],
+              [
+                286,
+                500
+              ],
+              [
+                286,
+                501
+              ],
+              [
+                289,
+                501
+              ],
+              [
+                289,
+                499
+              ],
+              [
+                287,
+                499
+              ]
+            ],
+            [
+              [
+                348,
+                539
+              ],
+              [
+                349,
+                539
+              ],
+              [
+                349,
+                540
+              ],
+              [
+                350,
+                540
+              ],
+              [
+                350,
+                538
+              ],
+              [
+                348,
+                538
+              ]
+            ]
           ]
         },
         {
@@ -4997,6 +5025,102 @@
                 396,
                 259
               ]
+            ],
+            [
+              [
+                411,
+                230
+              ],
+              [
+                410,
+                230
+              ],
+              [
+                410,
+                231
+              ],
+              [
+                411,
+                231
+              ],
+              [
+                411,
+                232
+              ],
+              [
+                413,
+                232
+              ],
+              [
+                413,
+                229
+              ],
+              [
+                411,
+                229
+              ]
+            ],
+            [
+              [
+                376,
+                296
+              ],
+              [
+                375,
+                296
+              ],
+              [
+                375,
+                297
+              ],
+              [
+                377,
+                297
+              ],
+              [
+                377,
+                295
+              ],
+              [
+                376,
+                295
+              ]
+            ],
+            [
+              [
+                407,
+                312
+              ],
+              [
+                409,
+                312
+              ],
+              [
+                409,
+                310
+              ],
+              [
+                407,
+                310
+              ]
+            ],
+            [
+              [
+                350,
+                322
+              ],
+              [
+                352,
+                322
+              ],
+              [
+                352,
+                320
+              ],
+              [
+                350,
+                320
+              ]
             ]
           ]
         },
@@ -5249,110 +5373,6 @@
             [
               195,
               454
-            ],
-            [
-              194,
-              454
-            ],
-            [
-              195,
-              457
-            ],
-            [
-              193,
-              457
-            ],
-            [
-              193,
-              459
-            ],
-            [
-              191,
-              459
-            ],
-            [
-              189,
-              461
-            ],
-            [
-              189,
-              463
-            ],
-            [
-              187,
-              464
-            ],
-            [
-              187,
-              468
-            ],
-            [
-              185,
-              468
-            ],
-            [
-              183,
-              466
-            ],
-            [
-              183,
-              465
-            ],
-            [
-              185,
-              465
-            ],
-            [
-              184,
-              462
-            ],
-            [
-              186,
-              462
-            ],
-            [
-              186,
-              459
-            ],
-            [
-              187,
-              459
-            ],
-            [
-              187,
-              457
-            ],
-            [
-              185,
-              457
-            ],
-            [
-              185,
-              456
-            ],
-            [
-              189,
-              456
-            ],
-            [
-              191,
-              454
-            ],
-            [
-              190,
-              451
-            ],
-            [
-              192,
-              451
-            ],
-            [
-              192,
-              452
-            ],
-            [
-              194,
-              452
             ],
             [
               198,
@@ -5786,6 +5806,146 @@
               277,
               436
             ]
+          ],
+          "holes": [
+            [
+              [
+                307,
+                386
+              ],
+              [
+                310,
+                386
+              ],
+              [
+                310,
+                385
+              ],
+              [
+                309,
+                385
+              ],
+              [
+                309,
+                384
+              ],
+              [
+                307,
+                384
+              ]
+            ],
+            [
+              [
+                273,
+                444
+              ],
+              [
+                275,
+                444
+              ],
+              [
+                275,
+                441
+              ],
+              [
+                273,
+                441
+              ]
+            ],
+            [
+              [
+                256,
+                469
+              ],
+              [
+                255,
+                469
+              ],
+              [
+                255,
+                470
+              ],
+              [
+                256,
+                470
+              ],
+              [
+                256,
+                471
+              ],
+              [
+                257,
+                471
+              ],
+              [
+                257,
+                468
+              ],
+              [
+                256,
+                468
+              ]
+            ],
+            [
+              [
+                222,
+                471
+              ],
+              [
+                224,
+                471
+              ],
+              [
+                224,
+                472
+              ],
+              [
+                225,
+                472
+              ],
+              [
+                225,
+                469
+              ],
+              [
+                222,
+                469
+              ]
+            ],
+            [
+              [
+                236,
+                483
+              ],
+              [
+                235,
+                483
+              ],
+              [
+                235,
+                484
+              ],
+              [
+                236,
+                484
+              ],
+              [
+                236,
+                485
+              ],
+              [
+                237,
+                485
+              ],
+              [
+                237,
+                482
+              ],
+              [
+                236,
+                482
+              ]
+            ]
           ]
         },
         {
@@ -6111,60 +6271,56 @@
         {
           "outline": [
             [
-              180,
-              454
-            ],
-            [
-              178,
-              454
-            ],
-            [
-              178,
-              453
-            ],
-            [
-              182,
-              449
-            ],
-            [
-              182,
-              447
+              177.667,
+              442.667
             ],
             [
               177,
               442
             ],
             [
-              175,
-              442
+              176.6,
+              442.0
+            ],
+            [
+              174.273,
+              440.545
             ],
             [
               174,
               440
             ],
             [
-              171,
-              441
+              173.609,
+              440.13
+            ],
+            [
+              171.952,
+              439.095
             ],
             [
               172,
               439
             ],
             [
-              168,
-              439
+              171.8,
+              439.0
             ],
             [
-              168,
-              437
-            ],
-            [
-              170,
-              437
+              168.6,
+              437.0
             ],
             [
               170,
-              438
+              437
+            ],
+            [
+              170.0,
+              437.875
+            ],
+            [
+              170.111,
+              437.944
             ],
             [
               172,
@@ -6239,28 +6395,8 @@
               445
             ],
             [
-              187,
-              449
-            ],
-            [
-              183,
-              450
-            ],
-            [
-              184,
-              452
-            ],
-            [
-              182,
-              453
-            ],
-            [
-              182,
-              455
-            ],
-            [
-              180,
-              455
+              185.667,
+              447.667
             ]
           ]
         },

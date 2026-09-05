@@ -10,10 +10,10 @@
     680,
     619
   ],
-  "title": "Second spring group · basins and plan boundaries",
+  "title": "Second spring group \u00b7 basins and plan boundaries",
   "figure": "Avramova 2024, Fig. 19 (digital p. 277 / printed p. 273), after Tsonchev 1940a: 99, fig. 17",
   "scope": "A study of the two basins and readable boundaries in the second spring group. Outlines are narrow display ribbons, not solid masonry. Open boundaries stay open. The four spring groups are not combined.",
-  "limitation": "Ribbon width and raised height are viewing conventions, not historic wall thickness or elevation. Basin colour identifies the inner floor footprint, not a reconstructed water level or depth. Hatching is retained in the source only; unknown wall thickness, the northern survey extent, and underground catchment/drainage paths are not reconstructed. Horizontal positions follow the raster within about ±3 pixels, without an inferred metre scale.",
+  "limitation": "Ribbon width and raised height are viewing conventions, not historic wall thickness or elevation. Basin colour identifies the inner floor footprint, not a reconstructed water level or depth. Hatching is retained in the source only; unknown wall thickness, the northern survey extent, and underground catchment/drainage paths are not reconstructed. Horizontal positions follow the raster within about \u00b13 pixels, without an inferred metre scale.",
   "features": [
     {
       "id": "recorded-boundaries",
@@ -821,7 +821,7 @@
     },
     {
       "id": "pool-boundaries",
-      "label": "Pools а and б · outer drawn edges",
+      "label": "Pools \u0430 and \u0431 \u00b7 outer drawn edges",
       "note": "The two closed basin limits follow Fig. 19. The narrow central rectangular line is retained separately as a source outline, with no inferred function or wall thickness. No hatched area has been inflated into a wall band.",
       "kind": "outline",
       "polygons": [
@@ -1501,8 +1501,8 @@
     },
     {
       "id": "pool-a",
-      "label": "Pool а · inner floor",
-      "note": "Avramova Table 2 (digital p. 80 / printed p. 76) records both group-2 pools at 6.90 × 4.50 m and 1.10–1.20 m deep. The displayed polygon follows the innermost visible floor/step line in Fig. 19; it is not scaled from those dimensions, and no depth or water level is reconstructed.",
+      "label": "Pool \u0430 \u00b7 inner floor",
+      "note": "Avramova Table 2 (digital p. 80 / printed p. 76) records both group-2 pools at 6.90 \u00d7 4.50 m and 1.10\u20131.20 m deep. The displayed polygon follows the innermost visible floor/step line in Fig. 19; it is not scaled from those dimensions, and no depth or water level is reconstructed.",
       "kind": "basin",
       "polygons": [
         {
@@ -1549,8 +1549,8 @@
     },
     {
       "id": "pool-b",
-      "label": "Pool б · inner floor",
-      "note": "Avramova Table 2 (digital p. 80 / printed p. 76) records both group-2 pools at 6.90 × 4.50 m and 1.10–1.20 m deep. The displayed polygon follows the innermost visible floor/step line in Fig. 19; it is not scaled from those dimensions, and no depth or water level is reconstructed.",
+      "label": "Pool \u0431 \u00b7 inner floor",
+      "note": "Avramova Table 2 (digital p. 80 / printed p. 76) records both group-2 pools at 6.90 \u00d7 4.50 m and 1.10\u20131.20 m deep. The displayed polygon follows the innermost visible floor/step line in Fig. 19; it is not scaled from those dimensions, and no depth or water level is reconstructed.",
       "kind": "basin",
       "polygons": [
         {
@@ -2239,5 +2239,16 @@
         }
       ]
     }
-  ]
+  ],
+  "independentReview": {
+    "sources": [
+      "Original archive plate",
+      "Complete dissertation digital p. 277 / printed p. 273",
+      "Catchment description digital p. 60 / printed p. 56",
+      "Pool dimensions digital p. 80 / printed p. 76",
+      "Step discussion digital p. 85 / printed p. 81"
+    ],
+    "result": "Geometry retained after independent visual comparison. Both basin corners, the western inset beside pool \u0430, opposite-end step lines, central thin rectangle, northern rectangles and deliberately open edges correspond to the source within the stated raster tolerance. The hatching and broken-line water channels correctly remain unextruded.",
+    "photographs": "The available stone-spout photograph is from the first spring group (Fig. 33), so it cannot supply missing structure for this group-two model. The historic locality image does not establish the floor geometry."
+  }
 }

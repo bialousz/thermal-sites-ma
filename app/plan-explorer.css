@@ -72,8 +72,10 @@
 .plan-feature-dot { width: 9px; height: 9px; flex-shrink: 0; background: #b7a489; border-radius: 2px; }
 .plan-feature-dot.is-basin { background: #779c9b; }
 .plan-feature-dot.is-detail { background: #c6b899; }
+.plan-feature-dot.is-hatched { background: repeating-linear-gradient(135deg, #8b9992 0 3px, #d1d9d3 3px 4px); }
 .plan-feature-dot.is-outline { background: #a76b45; }
 .plan-feature-list .plan-outline-key { display: flex; align-items: baseline; gap: 8px; padding: 10px; border: 1px solid #d7c6ab; border-radius: 3px; background: #ede5d3; color: #68513d; }
+.plan-feature-list .plan-hatched-key { border-color: #c5d0c8; background: #e8ede7; color: #475b51; }
 .plan-feature-list [aria-pressed='true'] .plan-feature-dot { background: #299e9b; }
 .plan-feature-list .plan-feature-note { margin: 16px 0 0; color: #4d665a; font-size: .875rem; line-height: 1.6; }
 .plan-evidence-note { display: flex; gap: 14px; padding: 24px 30px; background: #e4e8d9; border-top: 1px solid var(--plan-border); }

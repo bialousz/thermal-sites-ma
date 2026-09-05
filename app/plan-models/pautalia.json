@@ -11,8 +11,8 @@
   ],
   "title": "Pautalia · the public thermae",
   "figure": "Fig. 50 · after Ruseva-Slokoska 2002: 44, fig. 2 · Avramova 2024, digital p. 296 / printed p. 292",
-  "scope": "A source-traced relief of the published public-thermae plan: clearly bounded internal partitions, recorded boundary linework, the seven arcade alignments in room 1 and individually legible support marks in rooms 3 and 4. The city plan and eastern reservoir are not combined into this model.",
-  "limitation": "Plan geometry is distinguished by evidence: filled partitions have two legible edges; copper outlines show drafting lines whose wall thickness is unknown; low details show the recorded hypocaust alignments and support marks. All relief heights are display conventions, not ancient elevations. Fig. 51 provides partial hypocaust sections but does not establish whole-building elevations. No roof, completed arch system, bath water, missing pillar rows or unexcavated continuation is reconstructed. Keep the source visible for direct comparison.",
+  "scope": "A source-traced relief of the published public-thermae plan: clearly bounded internal partitions, recorded boundary linework, the seven arcade alignments in room 1 and individually legible support marks in rooms 3 and 4, including wall-attached marks. The city plan and eastern reservoir are not combined into this model.",
+  "limitation": "Plan geometry is distinguished by evidence: filled partitions have two legible edges; copper outlines show drafting lines whose wall thickness is unknown; copper alignment markers locate the seven room-1 arcades; square details identify the recorded support marks. All relief heights are display conventions, not ancient elevations. Fig. 51 documents partial hypocaust sections, not whole-building elevations. The three semicircular drawings labelled a above rooms 6 and 9 are retained only in the source: their status as horizontal footprints is not established by the supplied keyless plan or accompanying text. The three readable staircase strokes are projected as copper markers only; no staircase elevation is inferred. Ambiguous fragmentary marks and all section/cut lines remain unraised. No roof, completed arch system, bath water, missing pillar rows or unexcavated continuation is reconstructed. Keep the source visible for direct comparison.",
   "features": [
     {
       "id": "documented-partitions",
@@ -356,147 +356,147 @@
     },
     {
       "id": "room-1-arcades",
-      "label": "Room 1 · seven arcade alignments",
-      "note": "Seven parallel arcade alignments are visible in Fig. 50 and described on dissertation printed p. 89. Only their recorded plan extents are raised, including the short eastern surviving trace. These are projected alignments, not seven solid Roman walls; arches and unexcavated continuations are not reconstructed.",
-      "kind": "detail",
+      "label": "Room 1 · projected arcade alignments",
+      "note": "Seven copper alignment markers follow the parallel arcades drawn in Fig. 50 and described on printed p. 89, including the short eastern recorded trace. Their narrow marker width is a display convention and does not represent wall thickness. Fig. 49 and the complete Fig. 51 show arched openings, so these markers do not represent solid Roman walls. Individual piers, arch openings, upper cross-vaults and unexcavated continuations are not reconstructed from projected bands or perspective photographs.",
+      "kind": "outline",
       "polygons": [
         {
           "outline": [
             [
-              352.5,
-              41
+              354.5,
+              40.99
             ],
             [
-              358,
-              41
+              352.75,
+              292.99
             ],
             [
-              356,
-              293
+              354.25,
+              293.01
             ],
             [
-              351,
-              293
+              356.0,
+              41.01
             ]
           ]
         },
         {
           "outline": [
             [
-              369.5,
-              41
+              371.5,
+              40.99
             ],
             [
-              375,
-              41
+              368.75,
+              292.99
             ],
             [
-              372,
-              293
+              370.25,
+              293.01
             ],
             [
-              367,
-              293
+              373.0,
+              41.01
             ]
           ]
         },
         {
           "outline": [
             [
-              386.5,
-              58
+              388.5,
+              57.99
             ],
             [
-              392,
-              58
+              385.75,
+              292.99
             ],
             [
-              389,
-              293
+              387.25,
+              293.01
             ],
             [
-              384,
-              293
+              390.0,
+              58.01
             ]
           ]
         },
         {
           "outline": [
             [
-              403.5,
-              58
+              405.5,
+              57.99
             ],
             [
-              409,
-              58
+              402.75,
+              292.99
             ],
             [
-              406,
-              293
+              404.25,
+              293.01
             ],
             [
-              401,
-              293
+              407.0,
+              58.01
             ]
           ]
         },
         {
           "outline": [
             [
-              420.5,
-              58
+              422.25,
+              57.99
             ],
             [
-              425.5,
-              58
+              419.25,
+              292.99
             ],
             [
-              422.5,
-              293
+              420.75,
+              293.01
             ],
             [
-              417.5,
-              293
+              423.75,
+              58.01
             ]
           ]
         },
         {
           "outline": [
             [
-              437.5,
-              58
+              439.5,
+              57.99
             ],
             [
-              443,
-              58
+              437.25,
+              292.99
             ],
             [
-              441,
-              293
+              438.75,
+              293.01
             ],
             [
-              435,
-              293
+              441.0,
+              58.01
             ]
           ]
         },
         {
           "outline": [
             [
-              453,
-              164
+              454.75,
+              164.0
             ],
             [
-              458,
-              164
+              454.0,
+              293.0
             ],
             [
-              457,
-              293
+              455.5,
+              293.0
             ],
             [
-              452.5,
-              293
+              456.25,
+              164.0
             ]
           ]
         }
@@ -505,7 +505,7 @@
     {
       "id": "rooms-3-4-supports",
       "label": "Rooms 3 & 4 · surviving support marks",
-      "note": "Each small footprint follows an individually visible support mark in Fig. 50. The plate distinguishes the extant concentration from empty or unrecorded areas; no missing rows have been completed. These are the support marks shown by the draughtsperson, not an archaeological inventory or measured column heights. Printed p. 91 describes both brick-tile and ceramic-cylinder pilae, so a uniform upper cylinder is not invented.",
+      "note": "Each small footprint follows an individually legible support symbol in Fig. 50, including wall-attached marks. The hollow centres of the drafted symbols do not imply hollow excavated bases. No empty rows are completed. This is a count of represented plan marks, not an archaeological inventory or a measurement of column height. Printed p. 91 distinguishes square-tile bases with circular tiles beside walls from square bases with ceramic cylinders farther inside; an upper cylinder is not inferred for every support.",
       "kind": "detail",
       "polygons": [
         {
@@ -3005,6 +3005,306 @@
             [
               471,
               727
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              419.5,
+              587.8
+            ],
+            [
+              426.2,
+              587.8
+            ],
+            [
+              426.2,
+              594.4
+            ],
+            [
+              419.5,
+              594.4
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              418.7,
+              599.7
+            ],
+            [
+              425.8,
+              599.7
+            ],
+            [
+              425.8,
+              607.3
+            ],
+            [
+              418.7,
+              607.3
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              418.6,
+              608.4
+            ],
+            [
+              425.8,
+              608.4
+            ],
+            [
+              425.8,
+              616.4
+            ],
+            [
+              418.6,
+              616.4
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              419.4,
+              621.6
+            ],
+            [
+              426.0,
+              621.6
+            ],
+            [
+              426.0,
+              629.4
+            ],
+            [
+              419.4,
+              629.4
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              426.0,
+              623.8
+            ],
+            [
+              432.8,
+              623.8
+            ],
+            [
+              432.8,
+              631.5
+            ],
+            [
+              426.0,
+              631.5
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              425.0,
+              671.8
+            ],
+            [
+              432.2,
+              671.8
+            ],
+            [
+              432.2,
+              679.4
+            ],
+            [
+              425.0,
+              679.4
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              432.1,
+              673.0
+            ],
+            [
+              439.0,
+              673.0
+            ],
+            [
+              439.0,
+              680.0
+            ],
+            [
+              432.1,
+              680.0
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              425.0,
+              684.0
+            ],
+            [
+              432.2,
+              684.0
+            ],
+            [
+              432.2,
+              691.3
+            ],
+            [
+              425.0,
+              691.3
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              432.0,
+              684.0
+            ],
+            [
+              439.0,
+              684.0
+            ],
+            [
+              439.0,
+              691.3
+            ],
+            [
+              432.0,
+              691.3
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              425.0,
+              698.8
+            ],
+            [
+              431.7,
+              698.8
+            ],
+            [
+              431.7,
+              706.5
+            ],
+            [
+              425.0,
+              706.5
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              431.7,
+              700.0
+            ],
+            [
+              438.2,
+              700.0
+            ],
+            [
+              438.2,
+              707.0
+            ],
+            [
+              431.7,
+              707.0
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              461.5,
+              729.1
+            ],
+            [
+              468.2,
+              729.1
+            ],
+            [
+              468.2,
+              736.5
+            ],
+            [
+              461.5,
+              736.5
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              470.3,
+              729.6
+            ],
+            [
+              477.8,
+              729.6
+            ],
+            [
+              477.8,
+              737.5
+            ],
+            [
+              470.3,
+              737.5
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              479.7,
+              729.0
+            ],
+            [
+              486.5,
+              729.0
+            ],
+            [
+              486.5,
+              737.2
+            ],
+            [
+              479.7,
+              737.2
+            ]
+          ]
+        },
+        {
+          "outline": [
+            [
+              351.2,
+              674.3
+            ],
+            [
+              359.2,
+              674.3
+            ],
+            [
+              359.2,
+              683.7
+            ],
+            [
+              351.2,
+              683.7
             ]
           ]
         }
@@ -4449,7 +4749,7 @@
     {
       "id": "northern-fragments",
       "label": "Northern recorded fragments",
-      "note": "Fragmentary northern boundaries follow the source strokes without closing unexcavated gaps. The staircase is retained in the flat source plate; no stair risers or elevations are invented.",
+      "note": "Fragmentary northern boundaries follow the source strokes without closing unexcavated gaps. The small oblique cap beside room 1 follows its outer printed stroke. The adjacent staircase is represented only by the three readable plan lines in the separate trace layer; no risers or elevations are inferred.",
       "kind": "outline",
       "polygons": [
         {
@@ -4823,28 +5123,36 @@
         {
           "outline": [
             [
-              293.69,
-              77.68
+              292.42,
+              72.15
             ],
             [
-              306.25,
-              83.48
+              297.39,
+              75.03
             ],
             [
-              306.25,
+              305.75,
+              81.08
+            ],
+            [
+              305.75,
               93.0
             ],
             [
-              307.75,
+              307.25,
               93.0
             ],
             [
-              307.75,
-              82.52
+              307.25,
+              80.32
             ],
             [
-              294.31,
-              76.32
+              298.21,
+              73.77
+            ],
+            [
+              293.18,
+              70.85
             ]
           ]
         },
@@ -4951,535 +5259,272 @@
       ]
     },
     {
-      "id": "source-a-profiles",
-      "label": "Source profiles marked a",
-      "note": "These small semicircular profiles are retained as drawn lines. Their labels are left in the source plate, and they are not interpreted as new pools, rooms or measured vaults.",
+      "id": "northern-stair-traces",
+      "label": "Northern staircase · plan strokes",
+      "note": "Three parallel oblique strokes beside the northwest corner of room 1 are traced individually from Fig. 50, with open ends retained. The width of the copper markers is a display convention. These are plan-line markers only: no riser height, inclined slab, stair volume, tread depth or ancient elevation is reconstructed.",
       "kind": "outline",
       "polygons": [
         {
           "outline": [
             [
-              111.67,
-              153.95
+              290.88,
+              72.98
             ],
             [
-              111.4,
-              150.45
+              286.36,
+              79.61
             ],
             [
-              110.56,
-              146.99
+              280.84,
+              89.65
             ],
             [
-              109.2,
-              143.7
+              275.84,
+              99.65
             ],
             [
-              107.35,
-              140.67
+              270.34,
+              109.65
             ],
             [
-              105.04,
-              137.96
+              265.33,
+              119.66
             ],
             [
-              102.33,
-              135.65
+              261.8,
+              126.72
             ],
             [
-              99.3,
-              133.8
+              261.28,
+              128.38
             ],
             [
-              96.01,
-              132.44
+              262.72,
+              128.82
             ],
             [
-              92.55,
-              131.6
+              263.2,
+              127.28
             ],
             [
-              89.0,
-              131.32
+              266.67,
+              120.34
             ],
             [
-              85.45,
-              131.6
+              271.66,
+              110.35
             ],
             [
-              81.99,
-              132.44
+              277.16,
+              100.35
             ],
             [
-              78.7,
-              133.8
+              282.16,
+              90.35
             ],
             [
-              75.67,
-              135.65
+              287.64,
+              80.39
             ],
             [
-              72.96,
-              137.96
-            ],
-            [
-              70.65,
-              140.67
-            ],
-            [
-              68.8,
-              143.7
-            ],
-            [
-              67.44,
-              146.99
-            ],
-            [
-              66.6,
-              150.45
-            ],
-            [
-              66.33,
-              153.95
-            ],
-            [
-              67.67,
-              154.05
-            ],
-            [
-              67.94,
-              150.67
-            ],
-            [
-              68.72,
-              147.41
-            ],
-            [
-              70.0,
-              144.32
-            ],
-            [
-              71.75,
-              141.47
-            ],
-            [
-              73.92,
-              138.92
-            ],
-            [
-              76.47,
-              136.75
-            ],
-            [
-              79.32,
-              135.0
-            ],
-            [
-              82.41,
-              133.72
-            ],
-            [
-              85.67,
-              132.94
-            ],
-            [
-              89.0,
-              132.68
-            ],
-            [
-              92.33,
-              132.94
-            ],
-            [
-              95.59,
-              133.72
-            ],
-            [
-              98.68,
-              135.0
-            ],
-            [
-              101.53,
-              136.75
-            ],
-            [
-              104.08,
-              138.92
-            ],
-            [
-              106.25,
-              141.47
-            ],
-            [
-              108.0,
-              144.32
-            ],
-            [
-              109.28,
-              147.41
-            ],
-            [
-              110.06,
-              150.67
-            ],
-            [
-              110.33,
-              154.05
+              292.12,
+              73.82
             ]
           ]
         },
         {
           "outline": [
             [
-              198.67,
-              153.95
+              297.13,
+              74.95
             ],
             [
-              198.39,
-              150.29
+              294.43,
+              76.46
             ],
             [
-              197.51,
-              146.68
+              292.83,
+              79.66
             ],
             [
-              196.09,
-              143.25
+              287.83,
+              89.66
             ],
             [
-              194.16,
-              140.08
+              282.84,
+              99.65
             ],
             [
-              191.74,
-              137.26
+              277.34,
+              109.64
             ],
             [
-              188.92,
-              134.84
+              271.83,
+              119.67
             ],
             [
-              185.75,
-              132.91
+              268.82,
+              126.68
             ],
             [
-              182.32,
-              131.49
+              268.03,
+              128.26
             ],
             [
-              178.71,
-              130.61
+              269.37,
+              128.94
             ],
             [
-              175.0,
-              130.32
+              270.18,
+              127.32
             ],
             [
-              171.29,
-              130.61
+              273.17,
+              120.33
             ],
             [
-              167.68,
-              131.49
+              278.66,
+              110.36
             ],
             [
-              164.25,
-              132.91
+              284.16,
+              100.35
             ],
             [
-              161.08,
-              134.84
+              289.17,
+              90.34
             ],
             [
-              158.26,
-              137.26
+              294.17,
+              80.34
             ],
             [
-              155.84,
-              140.08
+              295.57,
+              77.54
             ],
             [
-              153.91,
-              143.25
-            ],
-            [
-              152.49,
-              146.68
-            ],
-            [
-              151.61,
-              150.29
-            ],
-            [
-              151.33,
-              153.95
-            ],
-            [
-              152.67,
-              154.05
-            ],
-            [
-              152.95,
-              150.51
-            ],
-            [
-              153.77,
-              147.1
-            ],
-            [
-              155.11,
-              143.87
-            ],
-            [
-              156.94,
-              140.88
-            ],
-            [
-              159.22,
-              138.22
-            ],
-            [
-              161.88,
-              135.94
-            ],
-            [
-              164.87,
-              134.11
-            ],
-            [
-              168.1,
-              132.77
-            ],
-            [
-              171.51,
-              131.95
-            ],
-            [
-              175.0,
-              131.68
-            ],
-            [
-              178.49,
-              131.95
-            ],
-            [
-              181.9,
-              132.77
-            ],
-            [
-              185.13,
-              134.11
-            ],
-            [
-              188.12,
-              135.94
-            ],
-            [
-              190.78,
-              138.22
-            ],
-            [
-              193.06,
-              140.88
-            ],
-            [
-              194.89,
-              143.87
-            ],
-            [
-              196.23,
-              147.1
-            ],
-            [
-              197.05,
-              150.51
-            ],
-            [
-              197.33,
-              154.05
+              297.87,
+              76.25
             ]
           ]
         },
         {
           "outline": [
             [
-              279.67,
-              153.95
+              301.96,
+              77.93
             ],
             [
-              279.39,
-              150.45
+              298.91,
+              79.46
             ],
             [
-              278.51,
-              146.98
+              296.82,
+              84.69
             ],
             [
-              277.09,
-              143.69
+              294.34,
+              89.64
             ],
             [
-              275.15,
-              140.66
+              291.34,
+              94.64
             ],
             [
-              272.73,
-              137.95
+              288.84,
+              99.64
             ],
             [
-              269.91,
-              135.64
+              285.84,
+              104.64
             ],
             [
-              266.74,
-              133.79
+              283.33,
+              109.66
             ],
             [
-              263.31,
-              132.43
+              280.82,
+              114.69
             ],
             [
-              259.7,
-              131.6
+              278.83,
+              119.67
             ],
             [
-              256.0,
-              131.32
+              275.84,
+              124.64
             ],
             [
-              252.3,
-              131.6
+              274.8,
+              126.72
             ],
             [
-              248.69,
-              132.43
+              274.28,
+              128.38
             ],
             [
-              245.26,
-              133.79
+              275.72,
+              128.82
             ],
             [
-              242.09,
-              135.64
+              276.2,
+              127.28
             ],
             [
-              239.27,
-              137.95
+              277.16,
+              125.36
             ],
             [
-              236.85,
-              140.66
+              280.17,
+              120.33
             ],
             [
-              234.91,
-              143.69
+              282.18,
+              115.31
             ],
             [
-              233.49,
-              146.98
+              284.67,
+              110.34
             ],
             [
-              232.61,
-              150.45
+              287.16,
+              105.36
             ],
             [
-              232.33,
-              153.95
+              290.16,
+              100.36
             ],
             [
-              233.67,
-              154.05
+              292.66,
+              95.36
             ],
             [
-              233.95,
-              150.67
+              295.66,
+              90.36
             ],
             [
-              234.77,
-              147.42
+              298.18,
+              85.31
             ],
             [
-              236.11,
-              144.33
+              300.09,
+              80.54
             ],
             [
-              237.93,
-              141.48
-            ],
-            [
-              240.21,
-              138.93
-            ],
-            [
-              242.87,
-              136.76
-            ],
-            [
-              245.86,
-              135.01
-            ],
-            [
-              249.09,
-              133.73
-            ],
-            [
-              252.5,
-              132.94
-            ],
-            [
-              256.0,
-              132.68
-            ],
-            [
-              259.5,
-              132.94
-            ],
-            [
-              262.91,
-              133.73
-            ],
-            [
-              266.14,
-              135.01
-            ],
-            [
-              269.13,
-              136.76
-            ],
-            [
-              271.79,
-              138.93
-            ],
-            [
-              274.07,
-              141.48
-            ],
-            [
-              275.89,
-              144.33
-            ],
-            [
-              277.23,
-              147.42
-            ],
-            [
-              278.05,
-              150.67
-            ],
-            [
-              278.33,
-              154.05
+              302.64,
+              79.27
             ]
           ]
         }
       ]
     }
   ],
-  "traceMethod": "Manual reading of architectural bands and source linework in image coordinates. Small support bounds were detected in the original raster and individually checked in an enlarged overlay; six clearly readable markers attached to the partition were added manually. Rendered page frame, oblique source section/cut lines, arrows, room numbers and labels are not raised.",
+  "traceMethod": "Manual reading of architectural bands and source linework in original 700 x 830 image coordinates. An independent review compared the complete Fig. 50 raster, enlarged overlays, Fig. 49 photograph, full Fig. 51 sections and dissertation printed pp. 89-91. It retained the seven documented arcade alignments as symbolic copper centreline markers rather than filled detail bands, added 15 individually visible wall-attached support symbols, traced three open staircase strokes and corrected their northern cap, and withheld three unkeyed semicircular a profiles from raised geometry. Support boundaries are display bounds of raster symbols with approximately +/-2 source-pixel uncertainty; no missing row is interpolated. Page frames, oblique source cut lines, arrows, room numbers, letter labels and uncertain profile drawings are not raised.",
   "supportingSources": [
     "Avramova 2024, digital p. 93 / printed p. 89: room-1 hypocaust, seven parallel arcades, partial excavation beneath the Ottoman mosque.",
     "Avramova 2024, digital p. 95 / printed p. 91: brick-tile and ceramic-cylinder supports in rooms 3 and 4.",
-    "Fig. 51 after Ruseva-Slokoska 2002: 45, fig. 3; Avramova 2024, digital p. 297 / printed p. 293: partial hypocaust sections."
+    "Fig. 51 after Ruseva-Slokoska 2002: 45, fig. 3; Avramova 2024, digital p. 297 / printed p. 293: partial hypocaust sections.",
+    "Fig. 49, room-1 photograph: corroborates a hypocaust of arcades and upper cross-vaults; no camera-derived dimensions are used."
   ],
   "sourceSha256": "21503c578f9fc210c2842d41fa2a7a83f4e81b70fda108408c5f754df0113e63"
 }

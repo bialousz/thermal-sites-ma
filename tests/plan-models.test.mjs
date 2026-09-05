@@ -8,6 +8,21 @@ const root = new URL('../', import.meta.url);
 const models = readdirSync(new URL('app/plan-models/', root))
   .filter((name) => name.endsWith('.json'))
   .map((name) => JSON.parse(readFileSync(new URL(`app/plan-models/${name}`, root), 'utf8')));
+const sourceLandmarks = JSON.parse(readFileSync(new URL('docs/3d-plans/source-landmarks.json', root), 'utf8'));
+
+function pointInRing([x, y], ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInPolygon(point, polygon) {
+  return pointInRing(point, polygon.outline) && !(polygon.holes ?? []).some((hole) => pointInRing(point, hole));
+}
 
 function jpegDimensions(bytes) {
   assert.equal(bytes.readUInt16BE(0), 0xffd8);
@@ -34,6 +49,18 @@ test('only the audited site plans are supplied', () => {
 });
 
 for (const model of models) {
+  test(`${model.siteId}: independently reviewed source landmarks retain supports and openings`, () => {
+    const landmarks = sourceLandmarks[model.siteId];
+    assert.ok(landmarks?.length >= 2, 'Every model needs independently reviewed source landmarks');
+    for (const landmark of landmarks) {
+      assert.ok(landmark.reason.length > 20, 'Landmarks must explain their source evidence');
+      const features = model.features.filter((feature) => landmark.featureId ? feature.id === landmark.featureId : feature.kind !== 'basin');
+      assert.ok(features.length > 0, `Missing reviewed feature: ${landmark.featureId}`);
+      const covered = features.some((feature) => feature.polygons.some((polygon) => pointInPolygon(landmark.point, polygon)));
+      assert.equal(covered, landmark.inside, `${landmark.point.join(', ')}: ${landmark.reason}`);
+    }
+  });
+
   test(`${model.siteId}: source image still matches the reviewed tracing`, () => {
     const bytes = readFileSync(new URL(`public${model.image}`, root));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), model.sourceSha256, 'Changing a source plate requires re-auditing the trace and overlay');
@@ -51,7 +78,7 @@ for (const model of models) {
     for (const feature of model.features) {
       assert.ok(!featureIds.has(feature.id));
       featureIds.add(feature.id);
-      assert.ok(['masonry', 'basin', 'detail', 'outline'].includes(feature.kind));
+      assert.ok(['masonry', 'hatched', 'basin', 'detail', 'outline'].includes(feature.kind));
       assert.ok(feature.label && feature.note);
       for (const polygon of feature.polygons) {
         const rings = [polygon.outline, ...(polygon.holes ?? [])];
@@ -81,7 +108,7 @@ for (const model of models) {
         shape.holes = (polygon.holes ?? []).map((ring) => new Path(ring.map(([x, y]) => new Vector2(x, -y))));
         return shape;
       });
-      const options = { depth: feature.kind === 'basin' ? 0.018 : 0.24, bevelEnabled: false, steps: 1, curveSegments: 1 };
+      const options = { depth: feature.kind === 'basin' ? 0.018 : feature.kind === 'outline' ? 0.09 : 0.24, bevelEnabled: false, steps: 1, curveSegments: 1 };
       const geometry = new ExtrudeGeometry(shapes, options);
       assert.ok(geometry.attributes.position.count > 0);
       assert.ok(geometry.attributes.position.array.every(Number.isFinite));
