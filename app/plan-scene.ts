@@ -91,7 +91,7 @@ export async function createPlanScene(
   const sourcePlane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), sourceMaterial);
   sourcePlane.rotation.x = -Math.PI / 2;
   sourcePlane.position.y = 0.008;
-  sourcePlane.visible = false;
+  sourcePlane.visible = true;
   scene.add(sourcePlane);
 
   const resources: { dispose: () => void }[] = [];
@@ -120,31 +120,31 @@ export async function createPlanScene(
     path.closePath();
     return path;
   };
-  const colors = { masonry: '#b7a489', basin: '#779c9b', detail: '#c6b899' };
+  const colors = { masonry: '#b7a489', basin: '#779c9b', detail: '#c6b899', outline: '#a76b45' };
   for (const feature of model.features) {
-    const meshes: typeof board[] = [];
-    for (const polygon of feature.polygons) {
+    const shapes = feature.polygons.map((polygon) => {
       const shape = toPath(polygon.outline);
       for (const hole of polygon.holes ?? []) shape.holes.push(toPath(hole, true));
-      // Display relief only: 2% of the longest crop side, NEVER historical height.
-      const depth = feature.kind === 'basin' ? 0.018 : 0.24;
-      const geometry = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, steps: 1, curveSegments: 1 });
-      geometry.rotateX(-Math.PI / 2);
-      const material = new THREE.MeshStandardMaterial({ color: colors[feature.kind], roughness: 0.84, metalness: 0 });
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.y = 0.015;
-      mesh.castShadow = feature.kind !== 'basin';
-      mesh.receiveShadow = true;
-      mesh.userData.featureId = feature.id;
-      mesh.userData.baseColor = colors[feature.kind];
-      scene.add(mesh);
-      meshes.push(mesh);
-      pickable.push(mesh);
-      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 35), new THREE.LineBasicMaterial({ color: '#514e44', transparent: true, opacity: 0.28 }));
-      edges.position.copy(mesh.position);
-      scene.add(edges);
-    }
-    featureMeshes.set(feature.id, meshes);
+      return shape;
+    });
+    // Batch repeated supports into one mesh per feature, retaining every source polygon.
+    // Display relief only: 2% of the longest crop side, NEVER historical height.
+    const depth = feature.kind === 'basin' ? 0.018 : 0.24;
+    const geometry = new THREE.ExtrudeGeometry(shapes, { depth, bevelEnabled: false, steps: 1, curveSegments: 1 });
+    geometry.rotateX(-Math.PI / 2);
+    const material = new THREE.MeshStandardMaterial({ color: colors[feature.kind], roughness: 0.84, metalness: 0 });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.y = 0.015;
+    mesh.castShadow = feature.kind !== 'basin';
+    mesh.receiveShadow = true;
+    mesh.userData.featureId = feature.id;
+    mesh.userData.baseColor = colors[feature.kind];
+    scene.add(mesh);
+    pickable.push(mesh);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 35), new THREE.LineBasicMaterial({ color: '#514e44', transparent: true, opacity: 0.28 }));
+    edges.position.copy(mesh.position);
+    scene.add(edges);
+    featureMeshes.set(feature.id, [mesh]);
   }
 
   const resize = () => {

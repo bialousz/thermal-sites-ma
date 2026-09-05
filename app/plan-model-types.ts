@@ -5,7 +5,7 @@ export type PlanFeature = {
   id: string;
   label: string;
   note: string;
-  kind: 'masonry' | 'basin' | 'detail';
+  kind: 'masonry' | 'basin' | 'detail' | 'outline';
   polygons: PlanPolygon[];
 };
 export type PlanModel = {

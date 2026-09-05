@@ -22,8 +22,15 @@ function jpegDimensions(bytes) {
   throw new Error('JPEG frame not found');
 }
 
-test('only the two audited site footprints are supplied', () => {
-  assert.deepEqual(models.map((model) => model.siteId).sort(), ['diocletianopolis', 'starozagorski-bani']);
+const auditedFigures = {
+  diocletianopolis: 37,
+  'haskovski-mineralni-bani': 19,
+  pautalia: 50,
+  'starozagorski-bani': 24,
+};
+
+test('only the audited site plans are supplied', () => {
+  assert.deepEqual(models.map((model) => model.siteId).sort(), Object.keys(auditedFigures).sort());
 });
 
 for (const model of models) {
@@ -34,7 +41,7 @@ for (const model of models) {
     const [x, y, w, h] = model.crop;
     assert.ok(x >= 0 && y >= 0 && w > 0 && h > 0);
     assert.ok(x + w <= model.imageWidth && y + h <= model.imageHeight);
-    assert.match(model.figure, /Fig\. (24|37)/);
+    assert.ok(model.figure.includes(`Fig. ${auditedFigures[model.siteId]}`));
     assert.match(model.limitation, /height/);
     assert.ok(model.scope.length > 40);
   });
@@ -44,7 +51,7 @@ for (const model of models) {
     for (const feature of model.features) {
       assert.ok(!featureIds.has(feature.id));
       featureIds.add(feature.id);
-      assert.ok(['masonry', 'basin', 'detail'].includes(feature.kind));
+      assert.ok(['masonry', 'basin', 'detail', 'outline'].includes(feature.kind));
       assert.ok(feature.label && feature.note);
       for (const polygon of feature.polygons) {
         const rings = [polygon.outline, ...(polygon.holes ?? [])];
@@ -67,15 +74,35 @@ for (const model of models) {
     }
   });
 
-  test(`${model.siteId}: Three.js can extrude every reviewed polygon into finite geometry`, () => {
-    for (const feature of model.features) for (const polygon of feature.polygons) {
-      const shape = new Shape(polygon.outline.map(([x, y]) => new Vector2(x, -y)));
-      shape.holes = (polygon.holes ?? []).map((ring) => new Path(ring.map(([x, y]) => new Vector2(x, -y))));
-      const geometry = new ExtrudeGeometry(shape, { depth: 0.24, bevelEnabled: false, steps: 1 });
+  test(`${model.siteId}: batched Three.js features preserve every polygon with finite buffers`, () => {
+    for (const feature of model.features) {
+      const shapes = feature.polygons.map((polygon) => {
+        const shape = new Shape(polygon.outline.map(([x, y]) => new Vector2(x, -y)));
+        shape.holes = (polygon.holes ?? []).map((ring) => new Path(ring.map(([x, y]) => new Vector2(x, -y))));
+        return shape;
+      });
+      const options = { depth: feature.kind === 'basin' ? 0.018 : 0.24, bevelEnabled: false, steps: 1, curveSegments: 1 };
+      const geometry = new ExtrudeGeometry(shapes, options);
       assert.ok(geometry.attributes.position.count > 0);
       assert.ok(geometry.attributes.position.array.every(Number.isFinite));
       assert.ok(geometry.attributes.normal.array.every(Number.isFinite));
+      const individualVertexCount = shapes.reduce((count, shape) => {
+        const individual = new ExtrudeGeometry(shape, options);
+        const result = count + individual.attributes.position.count;
+        individual.dispose();
+        return result;
+      }, 0);
+      assert.equal(geometry.attributes.position.count, individualVertexCount, 'Batching must not drop tiny support polygons or open boundary segments');
       geometry.dispose();
     }
   });
 }
+
+test('single-line studies explicitly explain display line width', () => {
+  for (const model of models.filter((model) => model.features.some((feature) => feature.kind === 'outline'))) {
+    assert.match(model.limitation, /thickness/);
+    for (const feature of model.features.filter((feature) => feature.kind === 'outline')) {
+      assert.match(feature.note, /outline|line|ribbon|marker|stroke|copied/i);
+    }
+  }
+});

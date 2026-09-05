@@ -87,6 +87,13 @@ export const thermalSites: ThermalSite[] = [
     sourceFigures: [
       thesisThermalSitesMap,
       {
+        image: '/archive-plates/pautalia-hypocaust-sections.png',
+        caption: 'Sections of the hypocaust in room 1 of the public thermae.',
+        figure: 'Fig. 51 · after Ruseva-Slokoska 2002: 45, fig. 3 · dissertation digital p. 297 / printed p. 293',
+        label: 'HYPOCAUST SECTIONS',
+        note: 'The sections and the description on printed pp. 89–91 document the heating substructure. They do not establish the heights of the whole bath; the 3D plan keeps vertical dimensions schematic.',
+      },
+      {
         image: '/archive-plates/pautalia-city-plan.jpg',
         caption: 'Plan of the city and excavated sites.',
         figure: 'Fig. 34 · after Katsarova 2005',
@@ -527,6 +534,13 @@ export const thermalSites: ThermalSite[] = [
         caption: 'Plan of the pool at the first group of springs.',
         figure: 'Fig. 18 · after Tsonchev 1940a',
         label: 'POOL PLAN',
+      },
+      {
+        image: '/archive-plates/haskovski-group-two-source-page.png',
+        caption: 'Complete dissertation plate for the bath at the second group of springs, with the original scale and legend.',
+        figure: 'Fig. 19 · after Tsonchev 1940a: 99, fig. 17 · dissertation digital p. 277 / printed p. 273',
+        label: 'COMPLETE SOURCE PLATE',
+        note: 'The broken lines record water installations. The hatching and open edges do not supply a complete exterior wall footprint; these are not filled into conjectural masonry.',
       },
     ],
     referenceImage: commonsImage('BASA-526K-1-1413-1-Mineralni_Bani,_Bulgaria.JPG'),

@@ -19,7 +19,7 @@ export function PlanExplorer({ model, onOpenSource }: {
   return <section className={`plan-explorer ${open ? 'is-open' : ''}`} aria-labelledby={`plan-heading-${model.siteId}`}>
     <div className="plan-heading">
       <div className="plan-heading-icon"><Box size={24} strokeWidth={1.3} /></div>
-      <div className="plan-heading-copy"><p className="plan-eyebrow">Spatial study · Experimental</p><h3 id={`plan-heading-${model.siteId}`}>{model.title}</h3><p>Explore the recorded footprint in 3D.</p></div>
+      <div className="plan-heading-copy"><p className="plan-eyebrow">Spatial study · Experimental</p><h3 id={`plan-heading-${model.siteId}`}>{model.title}</h3><p>Explore the documented plan in 3D.</p></div>
       <Button ref={opener} variant="outline" className="plan-launch" aria-expanded={open} aria-controls={`plan-content-${model.siteId}`} onClick={() => setOpen(!open)}>
         {open ? <><X size={17} /> Close 3D</> : <><Box size={17} /> Explore in 3D <ArrowRight size={17} /></>}
       </Button>
@@ -37,7 +37,7 @@ function PlanWorkbench({ model, onOpenSource, onClose }: {
   const workspace = useRef<HTMLDivElement>(null);
   const api = useRef<PlanSceneApi | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
-  const [source, setSource] = useState(false);
+  const [source, setSource] = useState(true);
   const [view, setView] = useState<'axonometric' | 'plan'>('axonometric');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
@@ -53,6 +53,7 @@ function PlanWorkbench({ model, onOpenSource, onClose }: {
         if (!scene) return;
         if (abort.signal.aborted) { scene.dispose(); return; }
         api.current = scene.api;
+        scene.api.source(true);
         dispose = scene.dispose;
         setStatus('ready');
       }).catch(() => { if (!abort.signal.aborted) setStatus('error'); });
@@ -93,7 +94,7 @@ function PlanWorkbench({ model, onOpenSource, onClose }: {
           const action = actions[event.key];
           if (action) { event.preventDefault(); action(); }
         }}>
-          <div className="plan-canvas-label"><span><i /> Recorded footprint</span><span>Height is schematic</span></div>
+          <div className="plan-canvas-label"><span><i /> Traced plan</span><span>Height is schematic</span></div>
           <div ref={host} className="plan-canvas" aria-hidden={status !== 'ready'} />
           {status !== 'ready' && <div className="plan-render-state" aria-live="polite">
             <Box size={34} strokeWidth={1.2} />
@@ -122,11 +123,11 @@ function PlanWorkbench({ model, onOpenSource, onClose }: {
       </div>
       <aside className="plan-inspector" aria-label="Plan evidence and features">
         <div className="plan-source-card"><p className="plan-eyebrow">Compare with the evidence</p><button className="plan-source-image" type="button" onClick={(event) => onOpenSource(event.currentTarget)} aria-label={`Enlarge source plan: ${model.figure}`}><Image src={model.image} width={model.imageWidth} height={model.imageHeight} unoptimized alt={`${model.title}, original archaeological plan`} /><span><Maximize2 size={15} /> Open source</span></button><p className="plan-citation">{model.figure}</p></div>
-        <div className="plan-feature-list"><h4>Explore the plan</h4><p>Select a feature here or in the model.</p><fieldset aria-label="Documented plan features">
+        <div className="plan-feature-list"><h4>Explore the plan</h4><p>Select a feature here or in the model.</p>{model.features.some((feature) => feature.kind === 'outline') && <p className="plan-outline-key"><i className="plan-feature-dot is-outline" /> Copper lines follow the drawing; their width does not represent wall thickness.</p>}<fieldset aria-label="Documented plan features">
           {model.features.map((feature) => <Button key={feature.id} variant="ghost" disabled={!ready} aria-pressed={selectedId === feature.id} onClick={() => setSelectedId(selectedId === feature.id ? null : feature.id)}><i className={`plan-feature-dot is-${feature.kind}`} /><span>{feature.label}</span><ArrowRight size={14} /></Button>)}
         </fieldset><p className="plan-feature-note" aria-live="polite">{selectedFeature?.note ?? model.scope}</p></div>
       </aside>
     </div>
-    <div className="plan-evidence-note"><span className="plan-evidence-mark"><Layers2 size={18} /></span><div><h4>A plan in relief</h4><p>Horizontal outlines are traced from the cited plate. The uniform relief height is only a viewing aid; original wall heights, roofs and missing structures are not reconstructed.</p><p>{model.limitation}</p></div></div>
+    <div className="plan-evidence-note"><span className="plan-evidence-mark"><Layers2 size={18} /></span><div><h4>A plan in relief</h4><p>Horizontal outlines are traced from the cited plate. Relief height is only a viewing aid; original wall heights, roofs and missing structures are not reconstructed.</p><p>{model.limitation}</p></div></div>
   </div>;
 }

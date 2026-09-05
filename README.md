@@ -12,9 +12,9 @@ Thermae Thraciae turns the site catalogue in Mariya Avramova’s doctoral disser
 - 11 **Dubious sites**, kept visibly separate from the confirmed corpus. They are shown as amber dashed locality markers with an evidence note, not as confirmed spas or reconstructions.
 - An interactive geographic map with current national borders and an AD 117 Roman provincial reference layer.
 - Click-to-expand source imagery and plans, so field photographs, archive plates, and diagrams can be read at full size.
-- Experimental 3D plan reliefs for two audited footprints: Momina salza at Diocletianopolis and selected fabric at Starozagorski Bani. Other sites have no 3D model.
+- Experimental 3D plan reliefs for Pautalia, Momina salza at Diocletianopolis, selected fabric at Starozagorski Bani, and the second spring group at Mineralni Bani (Haskovo). Other sites have no 3D model.
 
-The experience is deliberately evidence-first: each relief preserves source-image proportions and openings. Its constant display height is explicitly schematic, with no restored roofs, missing walls or ancient elevations. An aligned source underlay allows direct comparison. See [the 3D evidence audit](docs/3d-plans/README.md) for included scope, trace overlays, citations and reasons for excluding the other plans.
+The experience is deliberately evidence-first: each relief preserves source-image proportions and openings. Its constant display height is explicitly schematic, with no restored roofs, missing walls or ancient elevations. Copper outlines trace drawing lines without asserting masonry thickness. The aligned source underlay is on by default for every model and can be hidden with its toggle. See [the 3D evidence audit](docs/3d-plans/README.md) for included scope, trace overlays, citations and reasons for excluding the other plans.
 
 ## Research basis
 
@@ -32,7 +32,7 @@ The dissertation’s own heading, **“Dubious sites”** (printed p. 246), is r
 4. Click any plan or supporting image to open the image reader. Use its arrows or your keyboard’s left/right arrows to browse the record’s images. Source-specific notes and credits remain attached; **Open original image** opens the image separately.
 5. Close the image reader with its close button or Escape; keyboard focus returns to the image you opened.
 6. Amber dashed markers open separate **Dubious sites** notes with the locality, evidence caution and citation. These records are excluded from the confirmed total; Traianopolis is in present-day Greece.
-7. Records marked **3D** have an **Explore in 3D** option below the dossier. Rotate or zoom the relief, switch to top view, turn on the source underlay, or select a feature. Keyboard controls and pan buttons are provided. **Larger view** expands the canvas within the page. Devices without WebGL2 retain the original source image.
+7. Records marked **3D** have an **Explore in 3D** option below the dossier. Rotate or zoom the relief, switch to top view, toggle the source underlay (on by default), or select a feature. Keyboard controls and pan buttons are provided. **Larger view** expands the canvas within the page. Devices without WebGL2 retain the original source image.
 
 ## Project structure
 
