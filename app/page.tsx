@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import {
   ArrowRight,
+  ArrowLeft,
   BookOpenText,
   CircleAlert,
   Compass,
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { dubiousSites, thermalSites, type SourceFigure, type ThermalSite } from './atlas-data';
 import mapGeodata from './map-geodata.json';
 
@@ -30,7 +32,7 @@ const mapZoomBounds = { min: 1, max: 2.25, step: 0.15 };
 type MapPoint = [number, number];
 type MapPan = { x: number; y: number };
 type MapTouchPoint = { pointerId: number; clientX: number; clientY: number };
-type MapPinch = { distance: number; zoom: number };
+type MapPinch = { distance: number; zoom: number; midpoint: MapPan; pan: MapPan };
 type MapGeometry =
   | { type: 'Polygon'; coordinates: MapPoint[][] }
   | { type: 'MultiPolygon'; coordinates: MapPoint[][][] };
@@ -91,18 +93,21 @@ function secondaryName(site: ThermalSite) {
 }
 
 function EvidenceDots({ site }: { site: ThermalSite }) {
-  const points = [site.model.bath, site.model.catchment, site.model.ritual].filter(Boolean).length;
+  const categories = [
+    { name: 'Bath structures', recorded: site.model.bath },
+    { name: 'Catchment', recorded: site.model.catchment },
+    { name: 'Spring finds', recorded: site.model.ritual },
+  ];
+  const description = `Recorded evidence: ${categories.filter((category) => category.recorded).map((category) => category.name).join(', ') || 'none'}`;
   return (
-    <span className="evidence-dots" aria-label={`${points} evidence categories recorded`}>
-      {[0, 1, 2].map((point) => <i key={point} className={point < points ? 'is-on' : ''} />)}
+    <span className="evidence-dots" aria-label={description} title={description}>
+      {categories.map((category) => <i key={category.name} className={category.recorded ? 'is-on' : ''} />)}
     </span>
   );
 }
 
 function referenceImageBadge(site: ThermalSite) {
-  return /locality context/i.test(site.referenceCaption ?? '')
-    ? 'CURRENT LOCALITY CONTEXT · REAL IMAGE'
-    : 'PLACE RECORD · REAL IMAGE';
+  return site.referenceLabel ?? 'PLACE PHOTOGRAPH';
 }
 
 type DisplayVisual = SourceFigure & {
@@ -167,13 +172,13 @@ function visualScope(site: ThermalSite, visual: DisplayVisual) {
   }
 
   if (visual.kind === 'photo') {
-    return /locality context/i.test(visual.caption)
-      ? 'A present-day locality image, included only to orient the site in its living landscape.'
-      : 'A real site image that anchors the catalogue record in the present landscape.';
+    return visual.label === 'HISTORICAL PHOTOGRAPH'
+      ? 'A historical photograph documenting the locality at the date given in its caption.'
+      : 'A credited photograph of the site or its surroundings; the caption identifies its archaeological or locality context.';
   }
 
   if (visual.kind === 'context') {
-    return `No site-specific plan or reusable field image is reproduced for ${primaryName(site)} in the supplied dissertation. This regional map is retained as clearly labelled corpus context.`;
+    return `Regional context for ${primaryName(site)}. No site-specific plan or photograph is currently included in this atlas.`;
   }
 
   return 'A source image from the supplied dissertation, retained as archaeological evidence rather than turned into a reconstruction.';
@@ -196,10 +201,21 @@ export default function Home() {
   const mapDragOrigin = useRef<(MapPan & { pointerId: number; clientX: number; clientY: number }) | null>(null);
   const mapTouchPoints = useRef<Map<number, MapTouchPoint>>(new Map());
   const mapPinchOrigin = useRef<MapPinch | null>(null);
+  const lightboxOpenerRef = useRef<HTMLElement | null>(null);
+  const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const selected = thermalSites.find((site) => site.id === selectedId) ?? thermalSites[0];
   const selectedVisual = primaryVisual(selected);
   const selectedSupportingVisuals = supportingVisuals(selected, selectedVisual?.image);
+  const selectedVisuals = [selectedVisual, ...selectedSupportingVisuals].filter((visual): visual is DisplayVisual => Boolean(visual));
+  const activeVisualIndex = selectedVisuals.findIndex((visual) => visual.image === activeVisual?.image);
+  const openVisual = (visual: DisplayVisual, opener: HTMLButtonElement) => {
+    lightboxOpenerRef.current = opener;
+    setActiveVisual(visual);
+  };
+  const stepVisual = (direction: number) => {
+    setActiveVisual(selectedVisuals[(activeVisualIndex + direction + selectedVisuals.length) % selectedVisuals.length]);
+  };
   const dubiousFocus = dubiousSites.find((site) => site.id === dubiousFocusId) ?? null;
   const selectSite = (site: ThermalSite) => {
     setSelectedId(site.id);
@@ -213,7 +229,7 @@ export default function Home() {
     const listBounds = list.getBoundingClientRect();
     const rowBounds = row.getBoundingClientRect();
     const centeredTop = list.scrollTop + rowBounds.top - listBounds.top - (listBounds.height - rowBounds.height) / 2;
-    list.scrollTo({ top: Math.max(0, centeredTop), behavior: 'smooth' });
+    list.scrollTo({ top: Math.max(0, centeredTop), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   const selectMapSite = (site: ThermalSite) => {
     selectSite(site);
@@ -231,7 +247,7 @@ export default function Home() {
       y: Math.max(-maxY, Math.min(maxY, position.y)),
     };
   };
-  const centerMapOnSite = (site: ThermalSite) => {
+  const centerMapOnSite = (site: Pick<ThermalSite, 'lat' | 'lng'>) => {
     const layer = mapLayerRef.current;
     if (!layer) return;
 
@@ -247,6 +263,14 @@ export default function Home() {
     centerMapOnSite(site);
     scrollCatalogueToSite(site.id);
     document.getElementById('site-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('site-title')?.focus({ preventScroll: true });
+  };
+  const stepSite = (direction: number) => {
+    const index = thermalSites.findIndex((site) => site.id === selected.id);
+    const site = thermalSites[(index + direction + thermalSites.length) % thermalSites.length];
+    selectSite(site);
+    centerMapOnSite(site);
+    scrollCatalogueToSite(site.id);
   };
   const mapCanPan = (zoom = mapZoom) => {
     const viewport = mapViewportRef.current;
@@ -278,7 +302,7 @@ export default function Home() {
   };
   const startMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!mapCanPan() || event.button !== 0) return;
-    if ((event.target as Element).closest('button, a')) return;
+    if ((event.target as Element).closest('button, a, .dubious-map-card')) return;
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -290,8 +314,14 @@ export default function Home() {
     if (!first || !second) return 0;
     return Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY);
   };
+  const touchPairMidpoint = (): MapPan => {
+    const [first, second] = [...mapTouchPoints.current.values()];
+    const bounds = mapViewportRef.current?.getBoundingClientRect();
+    if (!first || !second || !bounds) return { x: 0, y: 0 };
+    return { x: (first.clientX + second.clientX) / 2 - bounds.left - bounds.width / 2, y: (first.clientY + second.clientY) / 2 - bounds.top - bounds.height / 2 };
+  };
   const startMapTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if ((event.target as Element).closest('button, a')) return;
+    if ((event.target as Element).closest('button, a, .dubious-map-card')) return;
 
     event.currentTarget.setPointerCapture(event.pointerId);
     mapTouchPoints.current.set(event.pointerId, {
@@ -303,9 +333,9 @@ export default function Home() {
     if (mapTouchPoints.current.size >= 2) {
       const distance = touchPairDistance();
       if (distance > 0) {
-        mapPinchOrigin.current = { distance, zoom: mapZoom };
+        mapPinchOrigin.current = { distance, zoom: mapZoom, midpoint: touchPairMidpoint(), pan: mapPan };
         mapDragOrigin.current = null;
-        setIsMapDragging(false);
+        setIsMapDragging(true);
         event.preventDefault();
       }
       return;
@@ -336,7 +366,14 @@ export default function Home() {
     const distance = touchPairDistance();
     if (distance <= 0) return;
     event.preventDefault();
-    setMapViewZoom(pinch.zoom * (distance / pinch.distance));
+    const zoom = Math.max(mapZoomBounds.min, Math.min(mapZoomBounds.max, pinch.zoom * distance / pinch.distance));
+    const midpoint = touchPairMidpoint();
+    const ratio = zoom / pinch.zoom;
+    setMapZoom(zoom);
+    setMapPan(constrainMapPan({
+      x: midpoint.x - (pinch.midpoint.x - pinch.pan.x) * ratio,
+      y: midpoint.y - (pinch.midpoint.y - pinch.pan.y) * ratio,
+    }, zoom));
   };
   const endMapDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     const origin = mapDragOrigin.current;
@@ -356,11 +393,13 @@ export default function Home() {
       setIsMapDragging(true);
     } else {
       endMapDrag(event);
+      setIsMapDragging(false);
     }
 
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
   const handleMapKeyboardPan = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if ((event.target as Element).closest('.dubious-map-card')) return;
     if (!mapCanPan()) return;
 
     const distance = event.shiftKey ? 90 : 42;
@@ -378,22 +417,24 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!activeVisual) return undefined;
-
-    const previousOverflow = document.body.style.overflow;
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setActiveVisual(null);
+    const viewport = mapViewportRef.current;
+    if (!viewport) return;
+    const zoomOnWheel = (event: WheelEvent) => {
+      if (event.deltaY === 0) return;
+      if ((event.target as Element).closest('button, a, .dubious-map-card')) return;
+      const nextZoom = Math.min(mapZoomBounds.max, Math.max(mapZoomBounds.min, mapZoom + (event.deltaY < 0 ? mapZoomBounds.step : -mapZoomBounds.step)));
+      if (nextZoom === mapZoom) return;
+      event.preventDefault();
+      setMapViewZoom(nextZoom);
     };
-
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', closeOnEscape);
+    viewport.addEventListener('wheel', zoomOnWheel, { passive: false });
     return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', closeOnEscape);
+      viewport.removeEventListener('wheel', zoomOnWheel);
     };
-  }, [activeVisual]);
+  });
   return (
     <main className="atlas-shell">
+      <a className="skip-link" href="#map-title">Skip to the map</a>
       <header className="atlas-header">
         <a className="wordmark" href="#atlas" aria-label="Thermae Thraciae home">
           <span className="wordmark-mark"><Waves size={18} strokeWidth={1.7} /></span>
@@ -417,21 +458,21 @@ export default function Home() {
         <div className="workspace-toolbar">
           <div>
             <p className="section-kicker">01 · Locate</p>
-            <h2 id="map-title">Thermal sites in Bulgaria</h2>
+            <h2 id="map-title" tabIndex={-1}>Thermal sites in Thrace</h2>
           </div>
           <div className="toolbar-controls">
-            <label className="dubious-toggle">
-              <Checkbox checked={showDubious} onCheckedChange={(checked) => { setShowDubious(checked === true); if (checked !== true) setDubiousFocusId(null); }} />
+            <label className="dubious-toggle" htmlFor="dubious-sites-layer">
+              <Checkbox id="dubious-sites-layer" aria-label="Dubious sites layer" checked={showDubious} onCheckedChange={(checked) => { setShowDubious(checked === true); if (checked !== true) setDubiousFocusId(null); }} />
               <span>Dubious sites layer <b>{dubiousSites.length}</b></span>
             </label>
             <div className="layer-controls" role="group" aria-label="Map layers">
               <span className="layer-control-label">Map layers</span>
-              <label className="layer-toggle layer-toggle-modern">
-                <Checkbox checked={showCurrentBorders} onCheckedChange={(checked) => setShowCurrentBorders(checked === true)} />
+              <label className="layer-toggle layer-toggle-modern" htmlFor="modern-borders-layer">
+                <Checkbox id="modern-borders-layer" aria-label="Modern borders" checked={showCurrentBorders} onCheckedChange={(checked) => setShowCurrentBorders(checked === true)} />
                 <span><i />Modern borders</span>
               </label>
-              <label className="layer-toggle layer-toggle-roman">
-                <Checkbox checked={showRomanEmpire} onCheckedChange={(checked) => setShowRomanEmpire(checked === true)} />
+              <label className="layer-toggle layer-toggle-roman" htmlFor="roman-empire-layer">
+                <Checkbox id="roman-empire-layer" aria-label="Roman Empire · AD 117" checked={showRomanEmpire} onCheckedChange={(checked) => setShowRomanEmpire(checked === true)} />
                 <span><i />Roman Empire · AD 117</span>
               </label>
             </div>
@@ -445,16 +486,6 @@ export default function Home() {
             role="region"
             tabIndex={0}
             aria-label="Interactive map of catalogued thermal sites. Use the controls, scroll wheel, or pinch gesture to zoom; drag or use the arrow keys to pan."
-            onWheel={(event) => {
-            const nextZoom = Math.min(
-              mapZoomBounds.max,
-              Math.max(mapZoomBounds.min, Math.round((mapZoom + (event.deltaY < 0 ? mapZoomBounds.step : -mapZoomBounds.step)) * 100) / 100),
-            );
-            if (nextZoom !== mapZoom) {
-              event.preventDefault();
-              setMapViewZoom(nextZoom);
-            }
-            }}
             onPointerDown={(event) => event.pointerType === 'touch' ? startMapTouch(event) : startMapDrag(event)}
             onPointerMove={(event) => event.pointerType === 'touch' ? moveMapTouch(event) : moveMap(event)}
             onPointerUp={(event) => event.pointerType === 'touch' ? endMapTouch(event) : endMapDrag(event)}
@@ -511,18 +542,18 @@ export default function Home() {
               <button type="button" onClick={resetMapView} disabled={mapZoom === mapZoomBounds.min && mapPan.x === 0 && mapPan.y === 0} aria-label="Reset map zoom and position" title="Reset zoom and position"><RotateCcw size={14} /></button>
               <span aria-live="polite" title={mapZoom > mapZoomBounds.min ? 'Drag the map to pan' : undefined}><b>{Math.round(mapZoom * 100)}%</b>{mapZoom > mapZoomBounds.min && <small>drag</small>}</span>
             </div>
-            {dubiousFocus && <div className="dubious-map-card"><button type="button" onClick={() => setDubiousFocusId(null)} aria-label="Close dubious site note">×</button><span><CircleAlert size={13} /> DUBIOUS / NOT CONFIRMED</span><b>{dubiousFocus.name}</b><p>{dubiousFocus.reason}</p><small>{dubiousFocus.sourcePages} · mapped only to modern locality context</small></div>}
+            {dubiousFocus && <div className="dubious-map-card" tabIndex={-1} aria-label={`${dubiousFocus.name}: dubious site`}><button type="button" onClick={() => setDubiousFocusId(null)} aria-label="Close dubious site note">×</button><span><CircleAlert size={13} /> DUBIOUS / NOT CONFIRMED</span><b>{dubiousFocus.name}</b>{dubiousFocus.currentName !== dubiousFocus.name && <p className="dubious-alias">{dubiousFocus.currentName}</p>}<small>{dubiousFocus.location}</small><p>{dubiousFocus.reason}</p><small>{dubiousFocus.sourcePages}</small></div>}
           </div>
 
           <aside className="record-stack" aria-label="Visible site records">
             <div className="record-stack-header"><span>Catalogued sites</span><span className="record-count">{thermalSites.length}</span></div>
             <div className="record-list" ref={recordListRef}>
-              {thermalSites.map((site) => <button type="button" data-site-id={site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); centerMapOnSite(site); }} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
+              {thermalSites.map((site) => <button type="button" data-site-id={site.id} aria-pressed={selected.id === site.id} className={`record-row ${selected.id === site.id ? 'is-selected' : ''}`} onClick={() => { selectSite(site); centerMapOnSite(site); }} key={site.id}><span className="record-index">{site.catalogueNo}</span><span className="record-name"><b>{primaryName(site)}</b><small>{secondaryName(site)}</small></span><EvidenceDots site={site} /></button>)}
             </div>
             <div className="record-key">
               <span><i className="key-confirmed" />confirmed anchor</span>
               {showDubious && <span><i className="key-dubious" />dubious locality</span>}
-              <span className="record-key-evidence"><span className="evidence-dots" aria-hidden="true"><i className="is-on" /><i className="is-on" /><i /></span>dots = reported evidence categories</span>
+              <span className="record-key-evidence"><span className="evidence-dots" aria-hidden="true"><i className="is-on" /><i className="is-on" /><i /></span>Bath · catchment · spring finds</span>
             </div>
           </aside>
         </div>
@@ -530,15 +561,16 @@ export default function Home() {
 
       <section className="site-stage" aria-labelledby="site-title">
         <div className="stage-titlebar">
-          <div><p className="section-kicker">02 · Explore</p><h2 id="site-title"><span>{selected.catalogueNo}</span> {primaryName(selected)}</h2></div>
-          <button type="button" className="site-next" onClick={() => { const index = thermalSites.findIndex((site) => site.id === selected.id); selectSite(thermalSites[(index + 1) % thermalSites.length]); }}>Next site <ArrowRight size={16} /></button>
+          <div><p className="section-kicker">02 · Explore</p><h2 id="site-title" tabIndex={-1}><span>{selected.catalogueNo}</span> {primaryName(selected)}</h2></div>
+          <div className="site-navigation" aria-label="Browse site records"><button type="button" className="site-next site-previous" onClick={() => stepSite(-1)} aria-label="Previous site"><ArrowLeft size={17} /></button><span>{thermalSites.findIndex((site) => site.id === selected.id) + 1} / {thermalSites.length}</span><button type="button" className="site-next" onClick={() => stepSite(1)}>Next site <ArrowRight size={17} /></button></div>
         </div>
+        <output className="sr-only" aria-live="polite">Selected site: {primaryName(selected)}</output>
 
         <div className="stage-grid">
           {selectedVisual ? <article className={`site-visual is-${selectedVisual.kind}`}>
             <div className="site-visual-topline"><span>{selectedVisual.label}</span><span>{selectedVisual.kind === 'plan' ? 'CITED DOCUMENT' : selectedVisual.kind === 'photo' ? 'PLACE IMAGE' : 'SOURCE IMAGE'}</span></div>
             <div className="site-visual-frame">
-              <button type="button" className="visual-image-trigger" onClick={() => setActiveVisual(selectedVisual)} aria-label={`View ${selectedVisual.caption} at full size`}><img src={selectedVisual.image} alt={selectedVisual.caption} /><span><Maximize2 size={14} /> View full image</span></button>
+              <button type="button" className="visual-image-trigger" onClick={(event) => openVisual(selectedVisual, event.currentTarget)} aria-label={`View ${selectedVisual.caption} at full size`}><img src={selectedVisual.image} alt={selectedVisual.caption} decoding="async" /><span><Maximize2 size={16} /> View full image</span></button>
             </div>
             <div className="site-visual-caption"><div><span>{selectedVisual.figure}</span><h3>{selectedVisual.caption}</h3></div><p>{visualScope(selected, selectedVisual)}</p></div>
           </article> : <article className="site-visual is-empty"><p>Source image pending</p><span>The catalogue record remains available at right.</span></article>}
@@ -546,7 +578,7 @@ export default function Home() {
           <article className="site-dossier">
             <div className="dossier-head"><div><p className="roman-name">{primaryName(selected)}</p><p className="modern-name">{secondaryName(selected)}</p></div><MapPinned size={22} /></div>
             <p className="site-location">{selected.location}</p>
-            <div className="water-strip"><div><span><Waves size={14} /> source</span><b>{selected.temperature}</b></div><div><span>acidity</span><b>{selected.acidity}</b></div><div><span>residue</span><b>{selected.mineral}</b></div></div>
+            <div className="water-strip"><div><span><Waves size={14} /> temperature</span><b>{selected.temperature}</b></div><div><span>acidity</span><b>{selected.acidity}</b></div><div><span>fixed residue</span><b>{selected.mineral}</b></div></div>
             {selected.waterNote && <p className="data-note"><CircleAlert size={14} /> {selected.waterNote}</p>}
             <div className="dossier-evidence"><div><span className="evidence-icon"><Landmark size={17} /></span><div><h3>Built evidence</h3><p>{selected.archaeology}</p></div></div><div><span className="evidence-icon ritual"><Sparkles size={17} /></span><div><h3>Spring deposits & ritual</h3><p>{selected.ritual}</p></div></div></div>
             {selected.caveat && <p className="data-note warning"><CircleAlert size={14} /> {selected.caveat}</p>}
@@ -561,21 +593,21 @@ export default function Home() {
           </div>
           {selectedSupportingVisuals.length > 0 ? <div className="source-strip">
             {selectedSupportingVisuals.map((asset) => <figure className={`support-card is-${asset.kind}`} key={asset.image}>
-              <button type="button" className="support-image-trigger" onClick={() => setActiveVisual(asset)} aria-label={`View ${asset.caption} at full size`}><img src={asset.image} alt={asset.caption} /><span><Maximize2 size={14} /></span></button>
+              <button type="button" className="support-image-trigger" onClick={(event) => openVisual(asset, event.currentTarget)} aria-label={`View ${asset.caption} at full size`}><img src={asset.image} alt={asset.caption} loading="lazy" decoding="async" /><span><Maximize2 size={17} /></span></button>
               <figcaption><span>{asset.label}</span><p>{asset.caption}</p><small>{asset.figure}</small></figcaption>
             </figure>)}
-          </div> : <div className="source-empty"><span>Single-source record</span><p>The lead visual is the only reusable site material currently reproduced in the supplied dissertation.</p></div>}
+          </div> : <div className="source-empty"><p>No additional site images are currently included in this atlas.</p></div>}
         </section>
       </section>
 
       <section className="catalog-section" aria-labelledby="catalog-title">
-        <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title">The confirmed corpus</h2></div></div>
+        <div className="catalog-heading"><div><p className="section-kicker">03 · Compare</p><h2 id="catalog-title" tabIndex={-1}>The confirmed corpus</h2></div></div>
         <div className="catalog-grid">
-          {thermalSites.map((site) => <button type="button" key={site.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
+          {thermalSites.map((site) => <button type="button" key={site.id} aria-pressed={site.id === selected.id} className={`catalog-tile ${site.id === selected.id ? 'is-selected' : ''}`} onClick={() => selectCorpusSite(site)}><span className="tile-code">{site.catalogueNo}</span><h3>{primaryName(site)}</h3><p>{secondaryName(site)}</p><div className="tile-meta"><span>{site.temperature}</span><EvidenceDots site={site} /></div></button>)}
         </div>
         <div className="dubious-section">
           <div className="dubious-heading"><div><h3>Dubious sites</h3></div><p>These eleven localities comprise the dissertation’s <i>Dubious sites</i> section. They are shown as amber, dashed locality markers—not confirmed thermal sites—and remain separate from the confirmed-site dossiers.</p></div>
-          <div className="dubious-grid">{dubiousSites.map((site) => <button type="button" className="dubious-tile" key={site.id} onClick={() => { setShowDubious(true); setDubiousFocusId(site.id); document.querySelector('.coordinate-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }}><h3>{site.name}</h3><p>{site.reason}</p><small>{site.sourcePages}</small></button>)}</div>
+          <div className="dubious-grid">{dubiousSites.map((site) => <button type="button" className="dubious-tile" key={site.id} onClick={() => { setShowDubious(true); setDubiousFocusId(site.id); centerMapOnSite(site); mapViewportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); requestAnimationFrame(() => document.querySelector<HTMLElement>('.dubious-map-card')?.focus({ preventScroll: true })); }}><h3>{site.name}</h3><p>{site.reason}</p><small>{site.sourcePages}</small></button>)}</div>
         </div>
       </section>
 
@@ -598,13 +630,13 @@ export default function Home() {
 
       <footer className="atlas-footer"><span>THERMAE THRACIAE</span><span>Source-led exploration of Roman thermalism in Thrace</span></footer>
 
-      {activeVisual && <div className="image-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" onClick={() => setActiveVisual(null)}>
-        <section className={`lightbox-panel is-${activeVisual.kind}`} onClick={(event) => event.stopPropagation()}>
-          <button type="button" className="lightbox-close" onClick={() => setActiveVisual(null)} aria-label="Close full image" autoFocus><X size={20} /></button>
+      <Dialog open={Boolean(activeVisual)} onOpenChange={(open) => { if (!open) setActiveVisual(null); }}>
+        {activeVisual && <DialogContent className={`lightbox-panel is-${activeVisual.kind}`} showCloseButton={false} initialFocus={lightboxCloseRef} finalFocus={lightboxOpenerRef} onKeyDown={(event) => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); stepVisual(event.key === 'ArrowRight' ? 1 : -1); } }}>
+          <div className="lightbox-toolbar"><span>{primaryName(selected)}</span><div className="lightbox-navigation"><button type="button" onClick={() => stepVisual(-1)} disabled={selectedVisuals.length < 2} aria-label="Previous image"><ArrowLeft size={18} /></button><span aria-live="polite">{activeVisualIndex + 1} / {selectedVisuals.length}</span><button type="button" onClick={() => stepVisual(1)} disabled={selectedVisuals.length < 2} aria-label="Next image"><ArrowRight size={18} /></button><DialogClose className="lightbox-close" ref={lightboxCloseRef} aria-label="Close full image"><X size={20} /></DialogClose></div></div>
           <div className="lightbox-media"><img src={activeVisual.image} alt={activeVisual.caption} /></div>
-          <div className="lightbox-caption"><div><span>{activeVisual.label}</span><h2 id="lightbox-title">{activeVisual.caption}</h2><p>{activeVisual.figure}</p></div>{activeVisual.href && <a href={activeVisual.href} target="_blank" rel="noreferrer">Open credited source <ExternalLink size={14} /></a>}</div>
-        </section>
-      </div>}
+          <div className="lightbox-caption"><div><span>{activeVisual.label}</span><DialogTitle id="lightbox-title">{activeVisual.caption}</DialogTitle><DialogDescription>{activeVisual.figure}</DialogDescription>{activeVisual.note && <p className="lightbox-note">{activeVisual.note}</p>}</div><div className="lightbox-links"><a href={activeVisual.image} target="_blank" rel="noreferrer">Open original image <ExternalLink size={14} /></a>{activeVisual.href && <a href={activeVisual.href} target="_blank" rel="noreferrer">Credited source <ExternalLink size={14} /></a>}</div></div>
+        </DialogContent>}
+      </Dialog>
     </main>
   );
 }

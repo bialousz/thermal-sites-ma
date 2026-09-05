@@ -1,6 +1,6 @@
 # Thermae Thraciae
 
-An interactive, source-led atlas of Roman thermalism in present-day Bulgaria.
+An interactive, source-led atlas of Roman thermalism in Thrace, focused on sixteen confirmed sites in present-day Bulgaria with a separate corpus of dubious localities.
 
 **Live atlas:** [thermal-thraciae.netlify.app](https://thermal-thraciae.netlify.app/)
 
@@ -8,7 +8,7 @@ An interactive, source-led atlas of Roman thermalism in present-day Bulgaria.
 
 Thermae Thraciae turns the site catalogue in Mariya Avramova’s doctoral dissertation into an explorable research interface. It brings together:
 
-- 16 confirmed thermal-site records, each with catalogued water data, archaeological evidence, cited plans where available, and supporting images.
+- 16 confirmed thermal-site records with catalogued water data and archaeological evidence; seven include cited plans. Skaptopara and Banya–Razlog currently show regional-map context only.
 - 11 **Dubious sites**, kept visibly separate from the confirmed corpus. They are shown as amber dashed locality markers with an evidence note, not as confirmed spas or reconstructions.
 - An interactive geographic map with current national borders and an AD 117 Roman provincial reference layer.
 - Click-to-expand source imagery and plans, so field photographs, archive plates, and diagrams can be read at full size.
@@ -26,10 +26,11 @@ The dissertation’s own heading, **“Dubious sites”** (printed p. 246), is r
 ## Using the atlas
 
 1. Use the map layers to compare modern borders with Roman provincial context.
-2. Zoom with the controls or trackpad/mouse wheel; once magnified, drag the map or use arrow keys to pan.
-3. Select a marker or catalog tile to open its site record.
-4. Click any plan or supporting image to view it in the full-image lightbox.
-5. Treat amber dashed markers as reported or uncertain localities, not confirmed thermal sites.
+2. Zoom with the controls, mouse wheel or a two-finger pinch. Drag the map or use arrow keys to pan; the cropped mobile view also supports panning at its initial zoom.
+3. Select a confirmed marker or catalogue tile to open its dossier. The map and catalogue list stay synchronized, including when using Previous / Next site.
+4. Click any plan or supporting image to open the image reader. Use its arrows or your keyboard’s left/right arrows to browse the record’s images. Source-specific notes and credits remain attached; **Open original image** opens the image separately.
+5. Close the image reader with its close button or Escape; keyboard focus returns to the image you opened.
+6. Amber dashed markers open separate **Dubious sites** notes with the locality, evidence caution and citation. These records are excluded from the confirmed total; Traianopolis is in present-day Greece.
 
 ## Project structure
 

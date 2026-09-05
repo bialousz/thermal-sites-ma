@@ -35,6 +35,7 @@ export type ThermalSite = {
   referenceSource?: string;
   referenceUrl?: string;
   referenceRights?: string;
+  referenceLabel?: string;
   model: {
     pools: number;
     bath: boolean;
@@ -530,6 +531,7 @@ export const thermalSites: ThermalSite[] = [
     ],
     referenceImage: commonsImage('BASA-526K-1-1413-1-Mineralni_Bani,_Bulgaria.JPG'),
     referenceCaption: 'Mineralni Bani in 1940 — locality context.',
+    referenceLabel: 'HISTORICAL PHOTOGRAPH',
     referenceSource: 'Wikimedia Commons · Bulgarian Archives State Agency',
     referenceUrl: 'https://commons.wikimedia.org/wiki/File:BASA-526K-1-1413-1-Mineralni_Bani,_Bulgaria.JPG',
     referenceRights: 'Public domain · BASA 526K / inv. 1 / unit 1413 / sheet 1',
@@ -649,7 +651,7 @@ export const dubiousSites: DubiousSite[] = [
     id: 'banya-sliven',
     name: 'Banya, Sliven Municipality',
     currentName: 'Novozagorski Mineralni Bani / Kortenski Bani',
-    location: 'Nova Zagora Province · locality context only',
+    location: 'Nova Zagora area · locality context only',
     lat: 42.401,
     lng: 26.0,
     zone: 'Central',
